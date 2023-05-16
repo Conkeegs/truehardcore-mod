@@ -44,7 +44,6 @@ public class TrueHardcore {
                 player.connection.disconnect(Component.empty());
             }
 
-            // Replace "yourWorldFolderName" with the actual name of your world folder
             File worldFolder = server.getWorldPath(LevelResource.ROOT).toFile();
 
             if (worldFolder != null && worldFolder.exists()) {
@@ -52,11 +51,11 @@ public class TrueHardcore {
                     FileUtils.deleteDirectory(worldFolder);
 
                     System.out.printf("%s deleted successfully.", worldFolder.getName());
-                } catch (IOException e) {
-                    System.out.printf("TRUEHARDCORE:");
+                } catch (IOException ioe) {
+                    LOGGER.error("Error deleting world folder - ", ioe);
                 }
             } else {
-                System.out.println("World folder not found.");
+                LOGGER.info("World folder not found.");
             }
         }
     }
