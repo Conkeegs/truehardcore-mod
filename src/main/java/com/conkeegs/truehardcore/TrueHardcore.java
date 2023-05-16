@@ -1,6 +1,5 @@
 package com.conkeegs.truehardcore;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.LevelResource;
@@ -20,13 +19,15 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
+import com.conkeegs.truehardcore.utils.TrueHardcoreLogger;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TrueHardcore.MODID)
 public class TrueHardcore {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "truehardcore";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = (Logger) TrueHardcoreLogger.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under
     // the "truehardcore" namespace
     // public static final DeferredRegister<Block> BLOCKS =
