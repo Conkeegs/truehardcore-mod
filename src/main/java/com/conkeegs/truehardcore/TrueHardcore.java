@@ -11,6 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import net.minecraft.network.chat.Component;
 
 import java.io.File;
@@ -18,8 +19,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
-
-import com.conkeegs.truehardcore.utils.TrueHardcoreLogger;
+import org.slf4j.LoggerFactory;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TrueHardcore.MODID)
@@ -27,7 +27,7 @@ public class TrueHardcore {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "truehardcore";
     // custom logga
-    private static final Logger LOGGER = (Logger) TrueHardcoreLogger.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger("[TRUEHARDCORE]");
 
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
@@ -38,7 +38,7 @@ public class TrueHardcore {
     public void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer) {
             ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-            MinecraftServer server = playerWhoDied.getServer();
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 player.connection.disconnect(Component.empty());
