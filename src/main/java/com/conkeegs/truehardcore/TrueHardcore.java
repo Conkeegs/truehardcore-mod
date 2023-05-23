@@ -2,20 +2,24 @@ package com.conkeegs.truehardcore;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.world.level.levelgen.WorldOptions;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import net.minecraft.network.chat.Component;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -37,25 +41,54 @@ public class TrueHardcore {
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer) {
-            ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+            // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            List<ServerPlayer> playerList = new ArrayList<>(server.getPlayerList().getPlayers());
 
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                player.connection.disconnect(Component.empty());
+            for (ServerPlayer player : playerList) {
+                player.connection
+                        .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
             }
 
-            File worldFolder = server.getWorldPath(LevelResource.ROOT).toFile();
+            server.stopServer();
 
-            if (worldFolder != null && worldFolder.exists()) {
-                try {
-                    FileUtils.deleteDirectory(worldFolder);
+            List<String> worldsToDelete = Arrays.asList("world", "world_nether", "world_the_end");
 
-                    System.out.printf("%s deleted successfully.", worldFolder.getName());
-                } catch (IOException ioe) {
-                    LOGGER.error("Error deleting world folder - ", ioe);
+            for (String worldName : worldsToDelete) {
+                File worldFolder = new File(worldName);
+
+                if (worldFolder != null && worldFolder.exists()) {
+                    try {
+                        FileUtils.deleteDirectory(worldFolder);
+
+                        LOGGER.info("{} deleted successfully.", worldFolder.getName());
+                    } catch (IOException ioe) {
+                        LOGGER.error("Error deleting world folder - ", ioe.getMessage());
+                    }
+                } else {
+                    LOGGER.info("World folder '{}' not found. Skipping it.", worldName);
                 }
-            } else {
-                LOGGER.info("World folder not found.");
+            }
+
+            String propertiesPath = "server.properties";
+            Properties properties = new Properties();
+
+            try (FileInputStream inputStream = new FileInputStream(propertiesPath)) {
+                properties.load(inputStream);
+            } catch (IOException ioe) {
+                LOGGER.error("Error reading server properties file - ", ioe.getMessage());
+
+                return;
+            }
+
+            properties.setProperty("level-seed", String.valueOf(WorldOptions.randomSeed()));
+
+            try (FileOutputStream outputStream = new FileOutputStream(propertiesPath)) {
+                properties.store(outputStream, "Modified server properties");
+
+                LOGGER.info("New world seed written successfully.");
+            } catch (IOException ioe) {
+                LOGGER.error("Error writing to server properties file - ", ioe.getMessage());
             }
         }
     }
