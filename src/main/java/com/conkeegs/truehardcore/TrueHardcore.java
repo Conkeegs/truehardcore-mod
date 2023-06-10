@@ -2,20 +2,20 @@ package com.conkeegs.truehardcore;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.WorldOptions;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import net.minecraft.network.chat.Component;
 
@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TrueHardcore.MODID)
+@Mod.EventBusSubscriber(modid = "truehardcore")
 public class TrueHardcore {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "truehardcore";
@@ -42,15 +43,22 @@ public class TrueHardcore {
     private static final Logger LOGGER = LoggerFactory.getLogger("[TRUEHARDCORE]");
 
     private boolean shouldShutdownServer = false;
+
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
-    public void onPlayerDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer) {
-            // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+    public static void onEntitySpawn(EntityJoinLevelEvent event) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Zombie) {
+            ((Zombie) entity).getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.8F);
+            ((Zombie) entity).getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8.0D);
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onServerTick(ServerTickEvent event) {
         if (event.phase == Phase.END && shouldShutdownServer) {
