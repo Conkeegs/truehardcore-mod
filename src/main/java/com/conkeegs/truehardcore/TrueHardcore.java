@@ -47,6 +47,33 @@ public class TrueHardcore {
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+    public static void onExplosionDetonate(ExplosionEvent.Detonate event) {
+        Explosion explosion = event.getExplosion();
+        DamageSource explosionDamageSource = explosion.getDamageSource();
+        Entity thingThatExploded = explosion.getExploder();
+
+        if (thingThatExploded instanceof Creeper) {
+            try {
+                Field explosionRadiusField = Creeper.class.getDeclaredField("explosionRadius");
+                explosionRadiusField.setAccessible(true);
+
+                int newExplosionRadius = 10;
+                explosionRadiusField.setInt((Creeper) thingThatExploded, newExplosionRadius);
+            } catch (Exception e) {
+                LOGGER.error("Error setting creeper explosion radius - " + e.getMessage(), e);
+            }
+            Set<Player> playersHurt = explosion.getHitPlayers().keySet();
+
+            for (Player player : playersHurt) {
+                double distanceFromCreeper = thingThatExploded.position().distanceTo(player.position());
+
+                if (distanceFromCreeper >= 0.0 && distanceFromCreeper <= 2.0) {
+                    player.hurt(explosionDamageSource, 30.0F);
+                } else {
+                    player.hurt(explosionDamageSource, (float) (30.0 / distanceFromCreeper + 11.0));
+                }
+            }
+        }
     }
 
     @SubscribeEvent
