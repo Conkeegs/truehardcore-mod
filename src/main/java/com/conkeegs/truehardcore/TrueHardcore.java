@@ -52,10 +52,24 @@ public class TrueHardcore {
     @SubscribeEvent
     public static void onEntitySpawn(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
+        String entityClassName = entity.getClass().getSimpleName();
 
-        if (entity instanceof Zombie) {
-            ((Zombie) entity).getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.8F);
-            ((Zombie) entity).getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8.0D);
+        if (modifiedMobs.containsKey(entityClassName) && entity instanceof LivingEntity) {
+            MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
+            Float mobSpeed = mobProperties.getSpeed();
+
+            if (mobSpeed != null) {
+                ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(mobSpeed);
+            }
+
+            if (mobProperties.getRandomSpeeds() != null) {
+                ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED)
+                        .setBaseValue(mobProperties.getRandomSpeed());
+            }
+
+            if (mobProperties.getDamage() != null) {
+                ((LivingEntity) entity).getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(mobProperties.getDamage());
+            }
         }
     }
 
