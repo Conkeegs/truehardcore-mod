@@ -59,6 +59,23 @@ public class TrueHardcore {
         }
     }
 
+    // @SubscribeEvent
+    // public void onPlayerDeath(LivingDeathEvent event) {
+    // if (event.getEntity() instanceof ServerPlayer) {
+    // // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+    // MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+    // List<ServerPlayer> playerList = new
+    // ArrayList<>(server.getPlayerList().getPlayers());
+
+    // for (ServerPlayer player : playerList) {
+    // player.connection
+    // .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
+    // }
+
+    // shouldShutdownServer = true;
+    // }
+    // }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onServerTick(ServerTickEvent event) {
         if (event.phase == Phase.END && shouldShutdownServer) {
@@ -114,22 +131,6 @@ public class TrueHardcore {
             LOGGER.info("Server shut down successfully.");
 
             shouldShutdownServer = false;
-        }
-    }
-
-    @SubscribeEvent
-    public void onPlayerDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer) {
-            // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-            List<ServerPlayer> playerList = new ArrayList<>(server.getPlayerList().getPlayers());
-
-            for (ServerPlayer player : playerList) {
-                player.connection
-                        .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
-            }
-
-            shouldShutdownServer = true;
         }
     }
 
