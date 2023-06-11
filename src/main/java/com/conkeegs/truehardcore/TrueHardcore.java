@@ -77,7 +77,7 @@ public class TrueHardcore {
                 int newExplosionRadius = 10;
                 explosionRadiusField.setInt((Creeper) thingThatExploded, newExplosionRadius);
             } catch (Exception e) {
-                LOGGER.error("Error setting creeper explosion radius - " + e.getMessage(), e);
+                LOGGER.error("Error setting creeper explosion radius - ", e.getMessage());
             }
             Set<Player> playersHurt = explosion.getHitPlayers().keySet();
 
