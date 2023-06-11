@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Blaze;
@@ -44,14 +43,16 @@ public class MobRegistry {
         this.addEntity(Creeper.class.getSimpleName(), null, null, creeperSpeeds);
         this.addEntity(Drowned.class.getSimpleName(), null, 11.0D, zombieSpeeds);
         this.addEntity(ElderGuardian.class.getSimpleName(), 0.5F, 12.0D, null);
-        this.addEntity(EnderDragon.class.getSimpleName(), null, 20.0D, null);
+        this.addEntity(EnderMan.class.getSimpleName(), null, 12.0D, null);
+        // ender dragon damages fix
+        // this.addEntity(EnderDragon.class.getSimpleName(), null, 20.0D, null);
         this.addEntity(Endermite.class.getSimpleName(), 0.28F, 6.0D, null);
         this.addEntity(Evoker.class.getSimpleName(), 0.55F, null, null);
         this.addEntity(Guardian.class.getSimpleName(), 0.55F, 10.0D, null);
         this.addEntity(Hoglin.class.getSimpleName(), 0.33F, 10.0D, null);
         this.addEntity(Husk.class.getSimpleName(), null, 11.0D, zombieSpeeds);
         this.addEntity(Illusioner.class.getSimpleName(), 0.55F, 6.0D, null);
-        this.addEntity(MagmaCube.class.getSimpleName(), 0.25F, 10.0D, null);
+        this.addEntity(MagmaCube.class.getSimpleName(), 0.33F, 10.0D, null);
         this.addEntity(Panda.class.getSimpleName(), 0.23F, 12.0D, null);
     }
 
