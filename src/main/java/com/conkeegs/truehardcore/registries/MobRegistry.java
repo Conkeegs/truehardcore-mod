@@ -1,0 +1,102 @@
+package com.conkeegs.truehardcore.registries;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Panda;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Drowned;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Husk;
+import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.MagmaCube;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+
+public class MobRegistry {
+    private static final ArrayList<Float> zombieSpeeds = new ArrayList<Float>(
+            Arrays.asList(0.357F, 0.3F, 0.33F, 0.35F, 0.34F, 0.38F, 0.4F, 0.39F, 0.36F, 0.352F, 0.37F, 0.32F, 0.36F,
+                    0.355F, 0.375F));
+    private static final ArrayList<Float> creeperSpeeds = new ArrayList<Float>(
+            Arrays.asList(0.3F, 0.28F, 0.35F, 0.32F));
+
+    private static MobRegistry instance;
+    private Map<String, MobProperties> entityMap;
+
+    private MobRegistry() {
+        entityMap = new HashMap<>();
+
+        // null speed = the mob has a random speed
+        this.addEntity(Zombie.class.getSimpleName(), null, 11.0D, zombieSpeeds);
+        this.addEntity(Blaze.class.getSimpleName(), null, 11.0D, null);
+        this.addEntity(CaveSpider.class.getSimpleName(), null, 9.0D, null);
+        this.addEntity(Creeper.class.getSimpleName(), null, null, creeperSpeeds);
+        this.addEntity(Drowned.class.getSimpleName(), null, 11.0D, zombieSpeeds);
+        this.addEntity(ElderGuardian.class.getSimpleName(), 0.5F, 12.0D, null);
+        this.addEntity(EnderDragon.class.getSimpleName(), null, 20.0D, null);
+        this.addEntity(Endermite.class.getSimpleName(), 0.28F, 6.0D, null);
+        this.addEntity(Evoker.class.getSimpleName(), 0.55F, null, null);
+        this.addEntity(Guardian.class.getSimpleName(), 0.55F, 10.0D, null);
+        this.addEntity(Hoglin.class.getSimpleName(), 0.33F, 10.0D, null);
+        this.addEntity(Husk.class.getSimpleName(), null, 11.0D, zombieSpeeds);
+        this.addEntity(Illusioner.class.getSimpleName(), 0.55F, 6.0D, null);
+        this.addEntity(MagmaCube.class.getSimpleName(), 0.25F, 10.0D, null);
+        this.addEntity(Panda.class.getSimpleName(), 0.23F, 12.0D, null);
+    }
+
+    public static MobRegistry getInstance() {
+        if (instance == null) {
+            instance = new MobRegistry();
+        }
+
+        return instance;
+    }
+
+    public Map<String, MobProperties> getAllMobs() {
+        return entityMap;
+    }
+
+    private void addEntity(String entityName, Float speed, Double damage, ArrayList<Float> randomSpeeds) {
+        entityMap.put(entityName, new MobProperties(speed, damage, randomSpeeds));
+    }
+
+    public class MobProperties {
+        private final Float speed;
+        private final Double damage;
+        private final ArrayList<Float> randomSpeeds;
+
+        public MobProperties(Float speed, Double damage,
+                ArrayList<Float> randomSpeeds) {
+            this.speed = speed;
+            this.damage = damage;
+            this.randomSpeeds = randomSpeeds;
+        }
+
+        public Float getSpeed() {
+            return speed;
+        }
+
+        public Double getDamage() {
+            return damage;
+        }
+
+        public ArrayList<Float> getRandomSpeeds() {
+            return randomSpeeds;
+        }
+
+        public Float getRandomSpeed() {
+            return this.randomSpeeds.get(new Random().nextInt(this.randomSpeeds.size()));
+        }
+    }
+}
