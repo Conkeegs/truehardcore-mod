@@ -6,6 +6,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Zombie;
@@ -100,18 +101,26 @@ public class TrueHardcore {
         if (modifiedMobs.containsKey(entityClassName) && entity instanceof LivingEntity) {
             MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
             Float mobSpeed = mobProperties.getSpeed();
+            AttributeInstance movementSpeedAttribute = ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED);
 
-            if (mobSpeed != null) {
-                ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(mobSpeed);
+            if (movementSpeedAttribute != null) {
+                if (mobSpeed != null) {
+                    movementSpeedAttribute.setBaseValue(mobSpeed);
+                }
+
+                if (mobProperties.getRandomSpeeds() != null) {
+                    movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
+                }
+
+                if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
+                    movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
+                }
             }
 
-            if (mobProperties.getRandomSpeeds() != null) {
-                ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED)
-                        .setBaseValue(mobProperties.getRandomSpeed());
-            }
+            AttributeInstance attackDamageAttribute = ((LivingEntity) entity).getAttribute(Attributes.ATTACK_DAMAGE);
 
-            if (mobProperties.getDamage() != null) {
-                ((LivingEntity) entity).getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(mobProperties.getDamage());
+            if (attackDamageAttribute != null && mobProperties.getDamage() != null) {
+                attackDamageAttribute.setBaseValue(mobProperties.getDamage());
             }
         }
     }
