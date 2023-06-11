@@ -42,6 +42,7 @@ public class TrueHardcore {
     // custom logga
     private static final Logger LOGGER = TruestLogger.getLogger();
 
+    private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
     private boolean shouldShutdownServer = false;
 
     public TrueHardcore() {
