@@ -40,7 +40,7 @@ public class TrueHardcore {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "truehardcore";
     // custom logga
-    private static final Logger LOGGER = LoggerFactory.getLogger("[TRUEHARDCORE]");
+    private static final Logger LOGGER = TruestLogger.getLogger();
 
     private boolean shouldShutdownServer = false;
 
