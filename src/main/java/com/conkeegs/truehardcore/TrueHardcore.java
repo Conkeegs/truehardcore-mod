@@ -159,6 +159,12 @@ public class TrueHardcore {
         }
     }
 
+    @SubscribeEvent
+    public static void onEntityDamage(LivingDamageEvent event) {
+        LOGGER.info("Entity - {}", event.getSource().getEntity().getName().getString());
+        LOGGER.info("Direct Entity - {}", event.getSource().getDirectEntity().getName().getString());
+    }
+
     // @SubscribeEvent
     // public void onPlayerDeath(LivingDeathEvent event) {
     // if (event.getEntity() instanceof ServerPlayer) {
