@@ -13,6 +13,7 @@ import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
+import com.conkeegs.truehardcore.registries.EntityRegistry;
 import com.conkeegs.truehardcore.registries.MobRegistry;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 
@@ -54,6 +55,7 @@ public class TrueHardcore {
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
+    private static final Map<String, Float> modifiedEntities = EntityRegistry.getInstance().getAllEntities();
 
     private static boolean creeperExploded = false;
     private static boolean shouldShutdownServer = false;
@@ -161,8 +163,19 @@ public class TrueHardcore {
 
     @SubscribeEvent
     public static void onEntityDamage(LivingDamageEvent event) {
-        LOGGER.info("Entity - {}", event.getSource().getEntity().getName().getString());
-        LOGGER.info("Direct Entity - {}", event.getSource().getDirectEntity().getName().getString());
+        Entity perpetrator = event.getSource().getDirectEntity();
+
+        if (perpetrator == null) {
+            return;
+        }
+
+        String perpetratorClassName = perpetrator.getClass().getSimpleName();
+
+        if (modifiedEntities.containsKey(perpetratorClassName) && perpetrator instanceof Entity) {
+            float damage = modifiedEntities.get(perpetratorClassName);
+
+            event.setAmount(damage);
+        }
     }
 
     // @SubscribeEvent
