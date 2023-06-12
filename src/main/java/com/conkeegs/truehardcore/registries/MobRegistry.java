@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.world.entity.animal.Panda;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraft.world.entity.monster.Creeper;
