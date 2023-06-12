@@ -145,7 +145,8 @@ public class TrueHardcore {
                 }
 
                 if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
-                    movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
+                    movementSpeedAttribute
+                            .setBaseValue(((Zombie) entity).getAttribute(Attributes.MOVEMENT_SPEED).getValue());
                 }
             }
 
