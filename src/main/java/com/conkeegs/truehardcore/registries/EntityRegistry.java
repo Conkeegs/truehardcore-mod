@@ -3,11 +3,9 @@ package com.conkeegs.truehardcore.registries;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.world.entity.Entity;
-
 public class EntityRegistry {
     private static EntityRegistry instance;
-    private Map<String, Class<? extends Entity>> itemMap;
+    private Map<String, Float> itemMap;
 
     private EntityRegistry() {
         itemMap = new HashMap<>();
@@ -23,11 +21,11 @@ public class EntityRegistry {
         return instance;
     }
 
-    public Map<String, Class<? extends Entity>> getAllEntities() {
+    public Map<String, Float> getAllEntities() {
         return itemMap;
     }
 
-    private void addEntity(String entityName, Class<? extends Entity> clazz) {
-        itemMap.put(entityName, clazz);
+    private void addEntity(String entityName, Float damage) {
+        itemMap.put(entityName, damage);
     }
 }
