@@ -54,7 +54,50 @@ public class TrueHardcore {
 
     private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
 
-    private boolean shouldShutdownServer = false;
+    private static boolean creeperExploded = false;
+    private static boolean shouldShutdownServer = false;
+
+    private static CreeperExplosion creeperExplosion = null;
+
+    private static class CreeperExplosion {
+        DamageSource explosionDamageSource;
+        Creeper creeper;
+
+        public CreeperExplosion(
+                DamageSource explosionDamageSource,
+                Creeper creeper) {
+            this.explosionDamageSource = explosionDamageSource;
+            this.creeper = creeper;
+        }
+
+        public void handleExplosion() {
+            float explosionRadius = 10F;
+
+            Explosion customExplosion = new Explosion(
+                    creeper.level,
+                    creeper,
+                    explosionDamageSource,
+                    null,
+                    creeper.getX(),
+                    creeper.getY(),
+                    creeper.getZ(),
+                    explosionRadius,
+                    false,
+                    Explosion.BlockInteraction.DESTROY);
+
+            customExplosion.explode();
+
+            List<BlockPos> affectedBlocks = customExplosion.getToBlow();
+
+            for (BlockPos blockPos : affectedBlocks) {
+                creeper.level.removeBlock(blockPos, false);
+            }
+
+            customExplosion.finalizeExplosion(true);
+
+            creeper.discard();
+        }
+    }
 
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
@@ -69,22 +112,16 @@ public class TrueHardcore {
                 Field explosionRadiusField = Creeper.class.getDeclaredField("explosionRadius");
                 explosionRadiusField.setAccessible(true);
 
-                int newExplosionRadius = 10;
-                explosionRadiusField.setInt((Creeper) thingThatExploded, newExplosionRadius);
-            } catch (Exception e) {
-                LOGGER.error("Error setting creeper explosion radius - ", e.getMessage());
-            }
-            Set<Player> playersHurt = explosion.getHitPlayers().keySet();
+    @SubscribeEvent
+    public static void onExplosionDetonate(ExplosionEvent.Start event) {
+        Explosion explosion = event.getExplosion();
+        Entity thingThatExploded = explosion.getExploder();
 
-            for (Player player : playersHurt) {
-                double distanceFromCreeper = thingThatExploded.position().distanceTo(player.position());
+        if (thingThatExploded instanceof Creeper creeper) {
+            event.setCanceled(true);
 
-                if (distanceFromCreeper >= 0.0 && distanceFromCreeper <= 2.0) {
-                    player.hurt(explosionDamageSource, 30.0F);
-                } else {
-                    player.hurt(explosionDamageSource, (float) (30.0 / distanceFromCreeper + 11.0));
-                }
-            }
+            creeperExplosion = new TrueHardcore.CreeperExplosion(explosion.getDamageSource(), creeper);
+            creeperExploded = true;
         }
     }
 
@@ -138,61 +175,70 @@ public class TrueHardcore {
     // }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onServerTick(ServerTickEvent event) {
+    public static void onServerTick(ServerTickEvent event) {
         if (event.phase == Phase.END && shouldShutdownServer) {
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-
-            try {
-                server.stopServer();
-            } catch (Exception exception) {
-                if (!(exception instanceof FileNotFoundException)) {
-                    LOGGER.error("Error shutting down server - ", exception.getMessage());
-                }
-            }
-
-            List<String> worldsToDelete = Arrays.asList("world", "world_nether", "world_the_end");
-
-            for (String worldName : worldsToDelete) {
-                File worldFolder = new File(worldName);
-
-                if (worldFolder != null && worldFolder.exists()) {
-                    try {
-                        FileUtils.deleteDirectory(worldFolder);
-
-                        LOGGER.info("World '{}' deleted successfully.", worldFolder.getName());
-                    } catch (IOException ioe) {
-                        LOGGER.error("Error deleting world folder - ", ioe.getMessage());
-                    }
-                } else {
-                    LOGGER.info("World folder '{}' not found. Skipping it.", worldName);
-                }
-            }
-
-            String propertiesPath = "server.properties";
-            Properties properties = new Properties();
-
-            try (FileInputStream inputStream = new FileInputStream(propertiesPath)) {
-                properties.load(inputStream);
-            } catch (IOException ioe) {
-                LOGGER.error("Error reading server properties file - ", ioe.getMessage());
-
-                return;
-            }
-
-            properties.setProperty("level-seed", String.valueOf(WorldOptions.randomSeed()));
-
-            try (FileOutputStream outputStream = new FileOutputStream(propertiesPath)) {
-                properties.store(outputStream, "Modified server properties");
-
-                LOGGER.info("New world seed written successfully.");
-            } catch (IOException ioe) {
-                LOGGER.error("Error writing to server properties file - ", ioe.getMessage());
-            }
-
-            LOGGER.info("Server shut down successfully.");
-
-            shouldShutdownServer = false;
+            handleWorldDeletion(event);
         }
+
+        if (creeperExploded) {
+            creeperExplosion.handleExplosion();
+            creeperExploded = false;
+        }
+    }
+
+    public static void handleWorldDeletion(ServerTickEvent event) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+
+        try {
+            server.stopServer();
+        } catch (Exception exception) {
+            if (!(exception instanceof FileNotFoundException)) {
+                LOGGER.error("Error shutting down server - ", exception.getMessage());
+            }
+        }
+
+        List<String> worldsToDelete = Arrays.asList("world", "world_nether", "world_the_end");
+
+        for (String worldName : worldsToDelete) {
+            File worldFolder = new File(worldName);
+
+            if (worldFolder != null && worldFolder.exists()) {
+                try {
+                    FileUtils.deleteDirectory(worldFolder);
+
+                    LOGGER.info("World '{}' deleted successfully.", worldFolder.getName());
+                } catch (IOException ioe) {
+                    LOGGER.error("Error deleting world folder - ", ioe.getMessage());
+                }
+            } else {
+                LOGGER.info("World folder '{}' not found. Skipping it.", worldName);
+            }
+        }
+
+        String propertiesPath = "server.properties";
+        Properties properties = new Properties();
+
+        try (FileInputStream inputStream = new FileInputStream(propertiesPath)) {
+            properties.load(inputStream);
+        } catch (IOException ioe) {
+            LOGGER.error("Error reading server properties file - ", ioe.getMessage());
+
+            return;
+        }
+
+        properties.setProperty("level-seed", String.valueOf(WorldOptions.randomSeed()));
+
+        try (FileOutputStream outputStream = new FileOutputStream(propertiesPath)) {
+            properties.store(outputStream, "Modified server properties");
+
+            LOGGER.info("New world seed written successfully.");
+        } catch (IOException ioe) {
+            LOGGER.error("Error writing to server properties file - ", ioe.getMessage());
+        }
+
+        LOGGER.info("Server shut down successfully.");
+
+        shouldShutdownServer = false;
     }
 
     // You can use EventBusSubscriber to automatically register all static methods
