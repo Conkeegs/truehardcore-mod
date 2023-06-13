@@ -42,9 +42,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-// fix server not shutting down properly
-// fix log messages
-
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TrueHardcore.MODID)
 @Mod.EventBusSubscriber(modid = "truehardcore")

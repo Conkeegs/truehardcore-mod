@@ -43,7 +43,6 @@ public class MobRegistry {
         this.addEntity(Drowned.class.getSimpleName(), null, 11.0D, zombieSpeeds);
         this.addEntity(ElderGuardian.class.getSimpleName(), 0.5F, 12.0D, null);
         this.addEntity(EnderMan.class.getSimpleName(), null, 12.0D, null);
-        // ender dragon damages fix
         // this.addEntity(EnderDragon.class.getSimpleName(), null, 20.0D, null);
         this.addEntity(Endermite.class.getSimpleName(), 0.28F, 6.0D, null);
         this.addEntity(Evoker.class.getSimpleName(), 0.55F, null, null);

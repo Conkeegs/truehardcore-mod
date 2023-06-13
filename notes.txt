@@ -1,0 +1,4 @@
+// fix server not shutting down properly
+// fix log messages
+// fix entity damage no matter armor
+// ender dragon damages fix
