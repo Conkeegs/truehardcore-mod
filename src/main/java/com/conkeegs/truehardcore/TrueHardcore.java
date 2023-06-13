@@ -107,15 +107,15 @@ public class TrueHardcore {
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-    public static void onExplosionDetonate(ExplosionEvent.Detonate event) {
-        Explosion explosion = event.getExplosion();
-        DamageSource explosionDamageSource = explosion.getDamageSource();
-        Entity thingThatExploded = explosion.getExploder();
 
-        if (thingThatExploded instanceof Creeper) {
-            try {
-                Field explosionRadiusField = Creeper.class.getDeclaredField("explosionRadius");
-                explosionRadiusField.setAccessible(true);
+        // print mobs
+        // ForgeRegistries.ENTITY_TYPES.getValues().stream()
+        // .filter(entityType -> entityType.canSummon())
+        // .forEach(entityType -> {
+        // String entityName = entityType.getDescription().getString();
+        // LOGGER.info(entityName);
+        // });
+    }
 
     @SubscribeEvent
     public static void onExplosionDetonate(ExplosionEvent.Start event) {
