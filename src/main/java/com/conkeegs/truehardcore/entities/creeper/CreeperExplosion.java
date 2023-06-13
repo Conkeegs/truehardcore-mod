@@ -7,6 +7,9 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+
+import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -47,6 +50,8 @@ public class CreeperExplosion extends Explosion {
     private static final ExplosionDamageCalculator EXPLOSION_DAMAGE_CALCULATOR = new ExplosionDamageCalculator();
     private final ObjectArrayList<BlockPos> toBlow = new ObjectArrayList<>();
     private final Map<Player, Vec3> hitPlayers = Maps.newHashMap();
+
+    private static final Logger LOGGER = TruestLogger.getLogger();
 
     public CreeperExplosion(Level p_46051_, @Nullable Entity p_46052_, @Nullable DamageSource p_46053_,
             @Nullable ExplosionDamageCalculator p_46054_, double p_46055_, double p_46056_, double p_46057_,
@@ -160,7 +165,7 @@ public class CreeperExplosion extends Explosion {
                         double d14 = (double) getSeenPercent(vec3, entity);
                         double d10 = (1.0D - d12) * d14;
                         entity.hurt(this.getDamageSource(),
-                                (float) ((int) ((d10 * d10 + d10) / 1.8D * (double) f2)));
+                                (float) ((int) ((d10 * d10 + d10) / 1.6D * (double) f2)));
                         double d11;
                         if (entity instanceof LivingEntity) {
                             LivingEntity livingentity = (LivingEntity) entity;
@@ -185,5 +190,10 @@ public class CreeperExplosion extends Explosion {
             }
         }
 
+    }
+
+    @Override
+    public List<BlockPos> getToBlow() {
+        return this.toBlow;
     }
 }
