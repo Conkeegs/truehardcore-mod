@@ -99,7 +99,6 @@ public class TrueHardcore {
             }
 
             customExplosion.finalizeExplosion(true);
-
             creeper.discard();
         }
     }
