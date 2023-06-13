@@ -9,10 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
+import com.conkeegs.truehardcore.entities.creeper.CreeperExplosion;
 import com.conkeegs.truehardcore.registries.EntityRegistry;
 import com.conkeegs.truehardcore.registries.MobRegistry;
 import com.conkeegs.truehardcore.utils.TruestLogger;
@@ -26,9 +28,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.levelgen.WorldOptions;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -60,15 +64,13 @@ public class TrueHardcore {
     private static boolean creeperExploded = false;
     private static boolean shouldShutdownServer = false;
 
-    private static CreeperExplosion creeperExplosion = null;
+    private static CreeperExplosionHandler creeperExplosion = null;
 
-    private static class CreeperExplosion {
+    private static class CreeperExplosionHandler {
         DamageSource explosionDamageSource;
         Creeper creeper;
 
-        public CreeperExplosion(
-                DamageSource explosionDamageSource,
-                Creeper creeper) {
+        public CreeperExplosionHandler(DamageSource explosionDamageSource, Creeper creeper) {
             this.explosionDamageSource = explosionDamageSource;
             this.creeper = creeper;
         }
@@ -76,7 +78,7 @@ public class TrueHardcore {
         public void handleExplosion() {
             float explosionRadius = 10F;
 
-            Explosion customExplosion = new Explosion(
+            CreeperExplosion customExplosion = new CreeperExplosion(
                     creeper.level,
                     creeper,
                     explosionDamageSource,
@@ -123,7 +125,7 @@ public class TrueHardcore {
         if (thingThatExploded instanceof Creeper creeper) {
             event.setCanceled(true);
 
-            creeperExplosion = new TrueHardcore.CreeperExplosion(explosion.getDamageSource(), creeper);
+            creeperExplosion = new TrueHardcore.CreeperExplosionHandler(explosion.getDamageSource(), creeper);
             creeperExploded = true;
         }
     }
