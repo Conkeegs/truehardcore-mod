@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.levelgen.WorldOptions;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,7 +54,8 @@ public class TrueHardcore {
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
-    private static final Map<String, Float> modifiedEntities = EntityRegistry.getInstance().getAllEntities();
+    private static final Map<String, Consumer<Entity>> modifiedEntities = EntityRegistry.getInstance()
+            .getAllEntities();
 
     private static boolean creeperExploded = false;
     private static boolean shouldShutdownServer = false;
@@ -128,49 +131,62 @@ public class TrueHardcore {
         String entityClassName = entity.getClass().getSimpleName();
 
         if (modifiedMobs.containsKey(entityClassName) && entity instanceof LivingEntity) {
-            MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
-            Float mobSpeed = mobProperties.getSpeed();
-            AttributeInstance movementSpeedAttribute = ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED);
-
-            if (movementSpeedAttribute != null) {
-                if (mobSpeed != null) {
-                    movementSpeedAttribute.setBaseValue(mobSpeed);
-                }
-
-                if (mobProperties.getRandomSpeeds() != null) {
-                    movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
-                }
-
-                if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
-                    movementSpeedAttribute
-                            .setBaseValue(((Zombie) entity).getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-                }
-            }
-
-            AttributeInstance attackDamageAttribute = ((LivingEntity) entity).getAttribute(Attributes.ATTACK_DAMAGE);
-
-            if (attackDamageAttribute != null && mobProperties.getDamage() != null) {
-                attackDamageAttribute.setBaseValue(mobProperties.getDamage());
-            }
+            handleLivingEntitySpawn(entity, entityClassName);
+        } else if (modifiedEntities.containsKey(entityClassName) && !(entity instanceof LivingEntity)) {
+            handleEntitySpawn(entity, entityClassName);
         }
     }
 
-    @SubscribeEvent
-    public static void onEntityDamage(LivingDamageEvent event) {
-        Entity perpetrator = event.getSource().getDirectEntity();
+    public static void handleEntitySpawn(Entity entity, String entityClassName) {
+        Consumer<Entity> callback = modifiedEntities.get(entityClassName);
 
-        if (perpetrator == null) {
-            return;
+        callback.accept((AbstractArrow) entity);
+    }
+
+    public static void handleLivingEntitySpawn(Entity entity, String entityClassName) {
+        MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
+        Float mobSpeed = mobProperties.getSpeed();
+        AttributeInstance movementSpeedAttribute = ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED);
+
+        if (movementSpeedAttribute != null) {
+            if (mobSpeed != null) {
+                movementSpeedAttribute.setBaseValue(mobSpeed);
+            }
+
+            if (mobProperties.getRandomSpeeds() != null) {
+                movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
+            }
+
+            if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
+                movementSpeedAttribute
+                        .setBaseValue(((Zombie) entity).getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+            }
         }
 
-        String perpetratorClassName = perpetrator.getClass().getSimpleName();
+        AttributeInstance attackDamageAttribute = ((LivingEntity) entity).getAttribute(Attributes.ATTACK_DAMAGE);
 
-        if (modifiedEntities.containsKey(perpetratorClassName) && perpetrator instanceof Entity) {
-            float damage = modifiedEntities.get(perpetratorClassName);
-
-            event.setAmount(damage);
+        if (attackDamageAttribute != null && mobProperties.getDamage() != null) {
+            attackDamageAttribute.setBaseValue(mobProperties.getDamage());
         }
     }
+
+    // @SubscribeEvent
+    // public static void onEntityDamage(LivingDamageEvent event) {
+    // Entity perpetrator = event.getSource().getDirectEntity();
+
+    // if (perpetrator == null) {
+    // return;
+    // }
+
+    // String perpetratorClassName = perpetrator.getClass().getSimpleName();
+
+    // if (modifiedEntities.containsKey(perpetratorClassName) && perpetrator
+    // instanceof Entity) {
+    // float damage = modifiedEntities.get(perpetratorClassName);
+
+    // event.setAmount(damage);
+    // }
+    // }
 
     // @SubscribeEvent
     // public void onPlayerDeath(LivingDeathEvent event) {
