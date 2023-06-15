@@ -60,44 +60,9 @@ public class TrueHardcore {
     private static boolean creeperExploded = false;
     private static boolean shouldShutdownServer = false;
 
-    private static CreeperExplosionHandler creeperExplosion = null;
+    private static CreeperExplosion.CreeperExplosionHandler creeperExplosion = null;
 
-    private static class CreeperExplosionHandler {
-        DamageSource explosionDamageSource;
-        Creeper creeper;
-
-        public CreeperExplosionHandler(DamageSource explosionDamageSource, Creeper creeper) {
-            this.explosionDamageSource = explosionDamageSource;
-            this.creeper = creeper;
-        }
-
-        public void handleExplosion() {
-            float explosionRadius = 10F;
-
-            CreeperExplosion customExplosion = new CreeperExplosion(
-                    creeper.level,
-                    creeper,
-                    explosionDamageSource,
-                    null,
-                    creeper.getX(),
-                    creeper.getY(),
-                    creeper.getZ(),
-                    explosionRadius,
-                    false,
-                    Explosion.BlockInteraction.DESTROY);
-
-            customExplosion.explode();
-
-            List<BlockPos> affectedBlocks = customExplosion.getToBlow();
-
-            for (BlockPos blockPos : affectedBlocks) {
-                creeper.level.removeBlock(blockPos, false);
-            }
-
-            customExplosion.finalizeExplosion(true);
-            creeper.discard();
-        }
-    }
+    private static Double newNumba = 0.0D;
 
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
@@ -120,7 +85,7 @@ public class TrueHardcore {
         if (thingThatExploded instanceof Creeper creeper) {
             event.setCanceled(true);
 
-            creeperExplosion = new TrueHardcore.CreeperExplosionHandler(explosion.getDamageSource(), creeper);
+            creeperExplosion = new CreeperExplosion.CreeperExplosionHandler(explosion.getDamageSource(), creeper);
             creeperExploded = true;
         }
     }

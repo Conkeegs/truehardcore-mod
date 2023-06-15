@@ -20,6 +20,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.EntityBasedExplosionDamageCalculator;
@@ -195,5 +196,42 @@ public class CreeperExplosion extends Explosion {
     @Override
     public List<BlockPos> getToBlow() {
         return this.toBlow;
+    }
+
+    public static class CreeperExplosionHandler {
+        DamageSource explosionDamageSource;
+        Creeper creeper;
+
+        public CreeperExplosionHandler(DamageSource explosionDamageSource, Creeper creeper) {
+            this.explosionDamageSource = explosionDamageSource;
+            this.creeper = creeper;
+        }
+
+        public void handleExplosion() {
+            float explosionRadius = 10F;
+
+            CreeperExplosion customExplosion = new CreeperExplosion(
+                    creeper.level,
+                    creeper,
+                    explosionDamageSource,
+                    null,
+                    creeper.getX(),
+                    creeper.getY(),
+                    creeper.getZ(),
+                    explosionRadius,
+                    false,
+                    Explosion.BlockInteraction.DESTROY);
+
+            customExplosion.explode();
+
+            List<BlockPos> affectedBlocks = customExplosion.getToBlow();
+
+            for (BlockPos blockPos : affectedBlocks) {
+                creeper.level.removeBlock(blockPos, false);
+            }
+
+            customExplosion.finalizeExplosion(true);
+            creeper.discard();
+        }
     }
 }
