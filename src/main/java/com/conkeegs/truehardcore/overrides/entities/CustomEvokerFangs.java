@@ -1,4 +1,4 @@
-package com.conkeegs.truehardcore.overrides.evoker;
+package com.conkeegs.truehardcore.overrides.entities;
 
 import java.util.UUID;
 import javax.annotation.Nullable;
