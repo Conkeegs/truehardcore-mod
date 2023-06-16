@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import com.conkeegs.truehardcore.utils.TruestLogger;
 
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.projectile.LargeFireball;
 
 public class ExplosionRegistry {
@@ -18,6 +19,7 @@ public class ExplosionRegistry {
     private ExplosionRegistry() {
         entityMap = new HashMap<>();
 
+        this.addEntity(Creeper.class.getSimpleName(), 10F);
         this.addEntity(LargeFireball.class.getSimpleName(), 10F);
     }
 
