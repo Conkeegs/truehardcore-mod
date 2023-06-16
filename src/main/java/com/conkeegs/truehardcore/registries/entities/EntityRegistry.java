@@ -16,12 +16,12 @@ import net.minecraft.world.level.Level;
 
 public class EntityRegistry {
     private static EntityRegistry instance;
-    private Map<String, Consumer<Map<Entity, Double>>> itemMap;
+    private Map<String, Consumer<Map<Entity, Double>>> entityMap;
 
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private EntityRegistry() {
-        itemMap = new HashMap<>();
+        entityMap = new HashMap<>();
 
         this.addEntity(Arrow.class.getSimpleName(), (Map<Entity, Double> test) -> {
             Entity ent = test.keySet().iterator().next();
@@ -58,10 +58,10 @@ public class EntityRegistry {
     }
 
     public Map<String, Consumer<Map<Entity, Double>>> getAllEntities() {
-        return itemMap;
+        return entityMap;
     }
 
     private void addEntity(String entityName, Consumer<Map<Entity, Double>> action) {
-        itemMap.put(entityName, action);
+        entityMap.put(entityName, action);
     }
 }
