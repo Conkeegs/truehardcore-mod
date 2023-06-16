@@ -59,8 +59,6 @@ public class TrueHardcore {
 
     private static CustomExplosion customExplosion = null;
 
-    private static Double newNumba = 0.0D;
-
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
