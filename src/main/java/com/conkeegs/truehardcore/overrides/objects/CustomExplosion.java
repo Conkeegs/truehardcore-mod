@@ -1,4 +1,4 @@
-package com.conkeegs.truehardcore.overrides.creeper.things;
+package com.conkeegs.truehardcore.overrides.objects;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.EntityBasedExplosionDamageCalculator;
@@ -33,7 +32,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class CreeperExplosion extends Explosion {
+public class CustomExplosion extends Explosion {
     private final Level level;
     private final double x;
     private final double y;
@@ -54,7 +53,7 @@ public class CreeperExplosion extends Explosion {
 
     private static final Logger LOGGER = TruestLogger.getLogger();
 
-    public CreeperExplosion(Level p_46051_, @Nullable Entity p_46052_, @Nullable DamageSource p_46053_,
+    public CustomExplosion(Level p_46051_, @Nullable Entity p_46052_, @Nullable DamageSource p_46053_,
             @Nullable ExplosionDamageCalculator p_46054_, double p_46055_, double p_46056_, double p_46057_,
             float p_46058_, boolean p_46059_, Explosion.BlockInteraction p_46060_) {
         super(
@@ -198,26 +197,26 @@ public class CreeperExplosion extends Explosion {
         return this.toBlow;
     }
 
-    public static class CreeperExplosionHandler {
+    public static class CustomExplosionHandler {
         DamageSource explosionDamageSource;
-        Creeper creeper;
+        Entity entity;
 
-        public CreeperExplosionHandler(DamageSource explosionDamageSource, Creeper creeper) {
+        public CustomExplosionHandler(DamageSource explosionDamageSource, Entity entity) {
             this.explosionDamageSource = explosionDamageSource;
-            this.creeper = creeper;
+            this.entity = entity;
         }
 
         public void handleExplosion() {
             float explosionRadius = 10F;
 
-            CreeperExplosion customExplosion = new CreeperExplosion(
-                    creeper.level,
-                    creeper,
+            CustomExplosion customExplosion = new CustomExplosion(
+                    entity.level,
+                    entity,
                     explosionDamageSource,
                     null,
-                    creeper.getX(),
-                    creeper.getY(),
-                    creeper.getZ(),
+                    entity.getX(),
+                    entity.getY(),
+                    entity.getZ(),
                     explosionRadius,
                     false,
                     Explosion.BlockInteraction.DESTROY);
@@ -227,11 +226,11 @@ public class CreeperExplosion extends Explosion {
             List<BlockPos> affectedBlocks = customExplosion.getToBlow();
 
             for (BlockPos blockPos : affectedBlocks) {
-                creeper.level.removeBlock(blockPos, false);
+                entity.level.removeBlock(blockPos, false);
             }
 
             customExplosion.finalizeExplosion(true);
-            creeper.discard();
+            entity.discard();
         }
     }
 }
