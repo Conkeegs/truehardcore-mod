@@ -130,6 +130,11 @@ public class TrueHardcore {
             if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
                 movementSpeedAttribute
                         .setBaseValue(((Zombie) entity).getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+            } else if (entity instanceof Piglin && ((Piglin) entity).isBaby()) {
+                movementSpeedAttribute
+                        .setBaseValue(((Piglin) entity).getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+            }
+
             }
         }
 
