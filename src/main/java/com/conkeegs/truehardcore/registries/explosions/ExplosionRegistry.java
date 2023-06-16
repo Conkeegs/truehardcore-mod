@@ -11,14 +11,14 @@ import net.minecraft.world.entity.projectile.LargeFireball;
 
 public class ExplosionRegistry {
     private static ExplosionRegistry instance;
-    private Map<String, Double> entityMap;
+    private Map<String, Float> entityMap;
 
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private ExplosionRegistry() {
         entityMap = new HashMap<>();
 
-        this.addEntity(LargeFireball.class.getSimpleName(), 10D);
+        this.addEntity(LargeFireball.class.getSimpleName(), 10F);
     }
 
     public static ExplosionRegistry getInstance() {
@@ -29,11 +29,11 @@ public class ExplosionRegistry {
         return instance;
     }
 
-    public Map<String, Double> getAllEntities() {
+    public Map<String, Float> getAllEntities() {
         return entityMap;
     }
 
-    private void addEntity(String entityName, Double explosionRadius) {
+    private void addEntity(String entityName, Float explosionRadius) {
         entityMap.put(entityName, explosionRadius);
     }
 }
