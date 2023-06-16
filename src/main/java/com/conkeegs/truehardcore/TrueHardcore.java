@@ -159,24 +159,6 @@ public class TrueHardcore {
     }
 
     // @SubscribeEvent
-    // public static void onEntityDamage(LivingDamageEvent event) {
-    // Entity perpetrator = event.getSource().getDirectEntity();
-
-    // if (perpetrator == null) {
-    // return;
-    // }
-
-    // String perpetratorClassName = perpetrator.getClass().getSimpleName();
-
-    // if (modifiedEntities.containsKey(perpetratorClassName) && perpetrator
-    // instanceof Entity) {
-    // float damage = modifiedEntities.get(perpetratorClassName);
-
-    // event.setAmount(damage);
-    // }
-    // }
-
-    // @SubscribeEvent
     // public void onPlayerDeath(LivingDeathEvent event) {
     // if (event.getEntity() instanceof ServerPlayer) {
     // // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
