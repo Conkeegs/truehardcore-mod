@@ -60,6 +60,8 @@ public class TrueHardcore {
 
     private static CustomExplosion customExplosion = null;
 
+    private static final MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -166,7 +168,6 @@ public class TrueHardcore {
     // public void onPlayerDeath(LivingDeathEvent event) {
     // if (event.getEntity() instanceof ServerPlayer) {
     // // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-    // MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
     // List<ServerPlayer> playerList = new
     // ArrayList<>(server.getPlayerList().getPlayers());
 
@@ -192,8 +193,6 @@ public class TrueHardcore {
     }
 
     public static void handleWorldDeletion(ServerTickEvent event) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-
         try {
             server.stopServer();
         } catch (Exception exception) {
