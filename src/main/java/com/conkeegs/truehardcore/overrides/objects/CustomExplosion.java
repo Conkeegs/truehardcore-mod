@@ -197,40 +197,18 @@ public class CustomExplosion extends Explosion {
         return this.toBlow;
     }
 
-    public static class CustomExplosionHandler {
-        DamageSource explosionDamageSource;
-        Entity entity;
+    public void handleExplosion() {
+        if (this.source != null) {
+            this.explode();
 
-        public CustomExplosionHandler(DamageSource explosionDamageSource, Entity entity) {
-            this.explosionDamageSource = explosionDamageSource;
-            this.entity = entity;
-        }
-
-        public void handleExplosion() {
-            float explosionRadius = 10F;
-
-            CustomExplosion customExplosion = new CustomExplosion(
-                    entity.level,
-                    entity,
-                    explosionDamageSource,
-                    null,
-                    entity.getX(),
-                    entity.getY(),
-                    entity.getZ(),
-                    explosionRadius,
-                    false,
-                    Explosion.BlockInteraction.DESTROY);
-
-            customExplosion.explode();
-
-            List<BlockPos> affectedBlocks = customExplosion.getToBlow();
+            List<BlockPos> affectedBlocks = this.getToBlow();
 
             for (BlockPos blockPos : affectedBlocks) {
-                entity.level.removeBlock(blockPos, false);
+                this.source.level.removeBlock(blockPos, false);
             }
 
-            customExplosion.finalizeExplosion(true);
-            entity.discard();
+            this.finalizeExplosion(true);
+            this.source.discard();
         }
     }
 }
