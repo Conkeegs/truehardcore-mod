@@ -1,11 +1,8 @@
 package com.conkeegs.truehardcore.overrides.entities;
 
 import java.util.UUID;
+
 import javax.annotation.Nullable;
-
-import org.slf4j.Logger;
-
-import com.conkeegs.truehardcore.utils.TruestLogger;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -30,8 +27,6 @@ public class CustomEvokerFangs extends Entity implements TraceableEntity {
    private LivingEntity owner;
    @Nullable
    private UUID ownerUUID;
-
-   private static final Logger LOGGER = TruestLogger.getLogger();
 
    public CustomEvokerFangs(EntityType<? extends EvokerFangs> p_36923_, Level p_36924_) {
       super(p_36923_, p_36924_);
@@ -126,7 +121,6 @@ public class CustomEvokerFangs extends Entity implements TraceableEntity {
       if (p_36945_.isAlive() && !p_36945_.isInvulnerable() && p_36945_ != livingentity) {
          if (livingentity == null) {
             p_36945_.hurt(this.damageSources().magic(), 7.0F);
-            LOGGER.info("Evoker fangs damage worked");
          } else {
             if (livingentity.isAlliedTo(p_36945_)) {
                return;

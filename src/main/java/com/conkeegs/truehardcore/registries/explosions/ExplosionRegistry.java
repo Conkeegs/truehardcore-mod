@@ -3,18 +3,12 @@ package com.conkeegs.truehardcore.registries.explosions;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-
-import com.conkeegs.truehardcore.utils.TruestLogger;
-
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.projectile.LargeFireball;
 
 public class ExplosionRegistry {
     private static ExplosionRegistry instance;
     private Map<String, Float> entityMap;
-
-    private static final Logger LOGGER = TruestLogger.getLogger();
 
     private ExplosionRegistry() {
         entityMap = new HashMap<>();
