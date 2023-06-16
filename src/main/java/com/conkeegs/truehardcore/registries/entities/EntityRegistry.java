@@ -30,24 +30,29 @@ public class EntityRegistry {
         });
 
         this.addEntity(EvokerFangs.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
-            event.setCanceled(true);
+            Entity oldEntity = event.getEntity();
+            Level oldEntityLevel = oldEntity.level;
 
-            Entity entity = event.getEntity();
-            Level entityLevel = entity.level;
-            // 7.0?
-
-            CustomEvokerFangs customEvokerFangs = new CustomEvokerFangs(
-                    entityLevel,
-                    entity.getX(),
-                    entity.getY(),
-                    entity.getZ(),
-                    entity.getYRot(),
+            replaceEntity(event, new CustomEvokerFangs(
+                    oldEntityLevel,
+                    oldEntity.getX(),
+                    oldEntity.getY(),
+                    oldEntity.getZ(),
+                    oldEntity.getYRot(),
                     0,
-                    null);
-
-            entityLevel.addFreshEntity(customEvokerFangs);
-            entity.discard();
+                    null),
+                    oldEntity,
+                    oldEntityLevel);
         });
+    }
+
+    public static void replaceEntity(EntityJoinLevelEvent event, Entity newEntity, Entity oldEntity,
+            Level oldEntityLevel) {
+        event.setCanceled(true);
+
+        // 7.0?
+        oldEntityLevel.addFreshEntity(newEntity);
+        oldEntity.discard();
     }
 
     public static EntityRegistry getInstance() {
