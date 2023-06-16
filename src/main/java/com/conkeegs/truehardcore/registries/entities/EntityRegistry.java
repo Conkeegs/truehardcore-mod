@@ -1,4 +1,4 @@
-package com.conkeegs.truehardcore.registries;
+package com.conkeegs.truehardcore.registries.entities;
 
 import java.util.HashMap;
 import java.util.Map;

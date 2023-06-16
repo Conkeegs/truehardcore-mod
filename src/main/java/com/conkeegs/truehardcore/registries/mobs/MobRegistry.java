@@ -1,4 +1,4 @@
-package com.conkeegs.truehardcore.registries;
+package com.conkeegs.truehardcore.registries.mobs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
