@@ -112,12 +112,6 @@ public class TrueHardcore {
         }
     }
 
-    public static void handleEntitySpawn(Entity entity, String entityClassName) {
-        Consumer<Entity> callback = modifiedEntities.get(entityClassName);
-
-        callback.accept(entity);
-    }
-
     public static void handleLivingEntitySpawn(Entity entity, String entityClassName) {
         MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
         Float mobSpeed = mobProperties.getSpeed();
@@ -143,6 +137,12 @@ public class TrueHardcore {
         if (attackDamageAttribute != null && mobProperties.getDamage() != null) {
             attackDamageAttribute.setBaseValue(mobProperties.getDamage());
         }
+    }
+
+    public static void handleEntitySpawn(Entity entity, String entityClassName) {
+        Consumer<Entity> callback = modifiedEntities.get(entityClassName);
+
+        callback.accept(entity);
     }
 
     // @SubscribeEvent
@@ -181,7 +181,7 @@ public class TrueHardcore {
     // }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onServerTick(ServerTickEvent event) {
+    public static void handleTick(ServerTickEvent event) {
         if (event.phase == Phase.END && shouldShutdownServer) {
             handleWorldDeletion(event);
         }
