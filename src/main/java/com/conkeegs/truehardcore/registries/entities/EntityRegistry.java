@@ -1,5 +1,6 @@
 package com.conkeegs.truehardcore.registries.entities;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -7,13 +8,16 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 
 import com.conkeegs.truehardcore.overrides.entities.CustomEvokerFangs;
+import com.conkeegs.truehardcore.overrides.entities.CustomShulkerBullet;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.EvokerFangs;
+import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.level.Level;
@@ -67,6 +71,29 @@ public class EntityRegistry {
                     Double.parseDouble(Integer.toString(motionVector.getZ()))),
                     oldEntity,
                     oldEntityLevel);
+        });
+
+        this.addEntity(ShulkerBullet.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
+            ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
+            Level oldEntityLevel = oldEntity.level;
+
+            try {
+                Field field = ShulkerBullet.class.getDeclaredField("finalTarget");
+
+                field.setAccessible(true);
+
+                Entity target = (Entity) field.get(oldEntity);
+
+                replaceEntity(event, new CustomShulkerBullet(
+                        oldEntityLevel,
+                        (Shulker) oldEntity.getOwner(),
+                        target,
+                        oldEntity.getDirection().getAxis()),
+                        oldEntity,
+                        oldEntityLevel);
+            } catch (Exception e) {
+                LOGGER.error("Error replacing Shulker bullet - ", e);
+            }
         });
     }
 
