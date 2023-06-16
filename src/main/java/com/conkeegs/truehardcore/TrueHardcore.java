@@ -55,12 +55,11 @@ public class TrueHardcore {
 
     private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
     private static final Map<String, Consumer<Entity>> modifiedEntities = EntityRegistry.getInstance()
-            .getAllEntities();
+    private static final Map<String, Float> modifiedExplosions = ExplosionRegistry.getInstance().getAllEntities();
 
-    private static boolean creeperExploded = false;
     private static boolean shouldShutdownServer = false;
 
-    private static CustomExplosion.CustomExplosionHandler customExplosionHandler = null;
+    private static CustomExplosion customExplosion = null;
 
     private static Double newNumba = 0.0D;
 
@@ -82,10 +81,24 @@ public class TrueHardcore {
         Explosion explosion = event.getExplosion();
         Entity thingThatExploded = explosion.getExploder();
 
-        if (thingThatExploded instanceof Creeper creeper) {
-            event.setCanceled(true);
+        if (thingThatExploded != null) {
+            String thingThatExplodedClassName = thingThatExploded.getClass().getSimpleName();
 
-            customExplosionHandler = new CustomExplosion.CustomExplosionHandler(explosion.getDamageSource(), creeper);
+            if (modifiedExplosions.containsKey(thingThatExplodedClassName)) {
+                event.setCanceled(true);
+
+                customExplosion = new CustomExplosion(
+                        thingThatExploded.level,
+                        thingThatExploded,
+                        explosion.getDamageSource(),
+                        null,
+                        thingThatExploded.getX(),
+                        thingThatExploded.getY(),
+                        thingThatExploded.getZ(),
+                        modifiedExplosions.get(thingThatExplodedClassName),
+                        false,
+                        Explosion.BlockInteraction.DESTROY);
+            }
         }
     }
 
@@ -175,9 +188,9 @@ public class TrueHardcore {
             handleWorldDeletion(event);
         }
 
-        if (customExplosionHandler != null) {
-            customExplosionHandler.handleExplosion();
-            customExplosionHandler = null;
+        if (customExplosion != null) {
+            customExplosion.handleExplosion();
+            customExplosion = null;
         }
     }
 
