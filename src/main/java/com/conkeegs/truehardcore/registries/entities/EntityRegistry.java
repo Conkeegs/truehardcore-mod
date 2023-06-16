@@ -13,22 +13,26 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 
 public class EntityRegistry {
     private static EntityRegistry instance;
-    private Map<String, Consumer<Entity>> entityMap;
+    private Map<String, Consumer<EntityJoinLevelEvent>> entityMap;
 
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private EntityRegistry() {
         entityMap = new HashMap<>();
 
-        this.addEntity(Arrow.class.getSimpleName(), (Entity entity) -> {
+        this.addEntity(Arrow.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
             // 4.5
-            ((Arrow) entity).setBaseDamage(4.5D);
+            ((Arrow) event.getEntity()).setBaseDamage(4.5D);
         });
 
-        this.addEntity(EvokerFangs.class.getSimpleName(), (Entity entity) -> {
+        this.addEntity(EvokerFangs.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
+            event.setCanceled(true);
+
+            Entity entity = event.getEntity();
             Level entityLevel = entity.level;
             // 7.0?
 
@@ -54,11 +58,11 @@ public class EntityRegistry {
         return instance;
     }
 
-    public Map<String, Consumer<Entity>> getAllEntities() {
+    public Map<String, Consumer<EntityJoinLevelEvent>> getAllEntities() {
         return entityMap;
     }
 
-    private void addEntity(String entityName, Consumer<Entity> action) {
+    private void addEntity(String entityName, Consumer<EntityJoinLevelEvent> action) {
         entityMap.put(entityName, action);
     }
 }

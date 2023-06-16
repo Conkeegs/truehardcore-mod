@@ -52,7 +52,8 @@ public class TrueHardcore {
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
-    private static final Map<String, Consumer<Entity>> modifiedEntities = EntityRegistry.getInstance().getAllEntities();
+    private static final Map<String, Consumer<EntityJoinLevelEvent>> modifiedEntities = EntityRegistry.getInstance()
+            .getAllEntities();
     private static final Map<String, Float> modifiedExplosions = ExplosionRegistry.getInstance().getAllEntities();
 
     private static boolean shouldShutdownServer = false;
@@ -106,7 +107,7 @@ public class TrueHardcore {
         if (modifiedMobs.containsKey(entityClassName) && entity instanceof LivingEntity) {
             handleLivingEntitySpawn(entity, entityClassName);
         } else if (modifiedEntities.containsKey(entityClassName) && !(entity instanceof LivingEntity)) {
-            handleEntitySpawn(entity, entityClassName);
+            handleEntitySpawn(event, entityClassName);
         }
     }
 
@@ -137,10 +138,10 @@ public class TrueHardcore {
         }
     }
 
-    public static void handleEntitySpawn(Entity entity, String entityClassName) {
-        Consumer<Entity> callback = modifiedEntities.get(entityClassName);
+    public static void handleEntitySpawn(EntityJoinLevelEvent event, String entityClassName) {
+        Consumer<EntityJoinLevelEvent> callback = modifiedEntities.get(entityClassName);
 
-        callback.accept(entity);
+        callback.accept(event);
     }
 
     // @SubscribeEvent
