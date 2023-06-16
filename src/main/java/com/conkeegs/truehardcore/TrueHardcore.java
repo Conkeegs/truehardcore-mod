@@ -60,7 +60,7 @@ public class TrueHardcore {
     private static boolean creeperExploded = false;
     private static boolean shouldShutdownServer = false;
 
-    private static CreeperExplosion.CreeperExplosionHandler creeperExplosion = null;
+    private static CustomExplosion.CustomExplosionHandler customExplosionHandler = null;
 
     private static Double newNumba = 0.0D;
 
@@ -85,8 +85,7 @@ public class TrueHardcore {
         if (thingThatExploded instanceof Creeper creeper) {
             event.setCanceled(true);
 
-            creeperExplosion = new CreeperExplosion.CreeperExplosionHandler(explosion.getDamageSource(), creeper);
-            creeperExploded = true;
+            customExplosionHandler = new CustomExplosion.CustomExplosionHandler(explosion.getDamageSource(), creeper);
         }
     }
 
@@ -176,9 +175,9 @@ public class TrueHardcore {
             handleWorldDeletion(event);
         }
 
-        if (creeperExploded) {
-            creeperExplosion.handleExplosion();
-            creeperExploded = false;
+        if (customExplosionHandler != null) {
+            customExplosionHandler.handleExplosion();
+            customExplosionHandler = null;
         }
     }
 
