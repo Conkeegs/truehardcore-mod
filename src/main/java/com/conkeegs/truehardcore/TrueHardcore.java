@@ -54,7 +54,7 @@ public class TrueHardcore {
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
-    private static final Map<String, Consumer<Entity>> modifiedEntities = EntityRegistry.getInstance()
+    private static final Map<String, Consumer<Entity>> modifiedEntities = EntityRegistry.getInstance().getAllEntities();
     private static final Map<String, Float> modifiedExplosions = ExplosionRegistry.getInstance().getAllEntities();
 
     private static boolean shouldShutdownServer = false;
@@ -117,7 +117,7 @@ public class TrueHardcore {
     public static void handleEntitySpawn(Entity entity, String entityClassName) {
         Consumer<Entity> callback = modifiedEntities.get(entityClassName);
 
-        callback.accept((AbstractArrow) entity);
+        callback.accept(entity);
     }
 
     public static void handleLivingEntitySpawn(Entity entity, String entityClassName) {

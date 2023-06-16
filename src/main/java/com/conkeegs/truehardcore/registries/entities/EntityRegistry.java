@@ -16,36 +16,33 @@ import net.minecraft.world.level.Level;
 
 public class EntityRegistry {
     private static EntityRegistry instance;
-    private Map<String, Consumer<Map<Entity, Double>>> entityMap;
+    private Map<String, Consumer<Entity>> entityMap;
 
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     private EntityRegistry() {
         entityMap = new HashMap<>();
 
-        this.addEntity(Arrow.class.getSimpleName(), (Map<Entity, Double> test) -> {
-            Entity ent = test.keySet().iterator().next();
+        this.addEntity(Arrow.class.getSimpleName(), (Entity entity) -> {
             // 4.5
-
-            ((Arrow) ent).setBaseDamage(test.get(ent));
+            ((Arrow) entity).setBaseDamage(4.5D);
         });
 
-        this.addEntity(EvokerFangs.class.getSimpleName(), (Map<Entity, Double> test) -> {
-            Entity ent = test.keySet().iterator().next();
-            Level entityLevel = ent.level;
+        this.addEntity(EvokerFangs.class.getSimpleName(), (Entity entity) -> {
+            Level entityLevel = entity.level;
             // 7.0?
 
             CustomEvokerFangs customEvokerFangs = new CustomEvokerFangs(
                     entityLevel,
-                    ent.getX(),
-                    ent.getY(),
-                    ent.getZ(),
-                    ent.getYRot(),
+                    entity.getX(),
+                    entity.getY(),
+                    entity.getZ(),
+                    entity.getYRot(),
                     0,
                     null);
 
             entityLevel.addFreshEntity(customEvokerFangs);
-            ent.discard();
+            entity.discard();
         });
     }
 
@@ -57,11 +54,11 @@ public class EntityRegistry {
         return instance;
     }
 
-    public Map<String, Consumer<Map<Entity, Double>>> getAllEntities() {
+    public Map<String, Consumer<Entity>> getAllEntities() {
         return entityMap;
     }
 
-    private void addEntity(String entityName, Consumer<Map<Entity, Double>> action) {
+    private void addEntity(String entityName, Consumer<Entity> action) {
         entityMap.put(entityName, action);
     }
 }
