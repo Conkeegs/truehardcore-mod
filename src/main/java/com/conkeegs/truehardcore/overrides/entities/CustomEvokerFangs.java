@@ -132,7 +132,7 @@ public class CustomEvokerFangs extends Entity implements TraceableEntity {
                return;
             }
 
-            p_36945_.hurt(this.damageSources().indirectMagic(this, livingentity), 6.0F);
+            p_36945_.hurt(this.damageSources().indirectMagic(this, livingentity), 7.0F);
          }
 
       }
