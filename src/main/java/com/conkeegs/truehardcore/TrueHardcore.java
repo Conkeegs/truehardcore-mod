@@ -189,24 +189,23 @@ public class TrueHardcore {
         callback.accept(event);
     }
 
-    // @SubscribeEvent
-    // public void onPlayerDeath(LivingDeathEvent event) {
-    // if (event.getEntity() instanceof ServerPlayer) {
-    // // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-    // List<ServerPlayer> playerList = new
-    // ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
+    @SubscribeEvent
+    public void onPlayerDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof ServerPlayer) {
+            // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+            List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
 
-    // for (ServerPlayer player : playerList) {
-    // player.connection
-    // .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
-    // }
+            for (ServerPlayer player : playerList) {
+                player.connection
+                        .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
+            }
 
-    // playerList.clear();
-    // server.overworld().disconnect();
+            playerList.clear();
+            server.overworld().disconnect();
 
-    // shouldShutdownServer = true;
-    // }
-    // }
+            shouldShutdownServer = true;
+        }
+    }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void handleTick(ServerTickEvent event) {
