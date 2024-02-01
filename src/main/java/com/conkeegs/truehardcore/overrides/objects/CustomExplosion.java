@@ -186,6 +186,7 @@ public class CustomExplosion extends Explosion {
                 }
             }
         }
+
     }
 
     public void finalizeExplosion(boolean p_46076_) {
