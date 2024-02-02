@@ -85,6 +85,13 @@ public class TrueHardcore {
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public static void handleServerStarted(ServerStartedEvent event) {
+        server = event.getServer();
+
+        server.overworld().getGameRules().getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
 
         // print mobs
         ForgeRegistries.ENTITY_TYPES.getValues().stream()
@@ -93,13 +100,6 @@ public class TrueHardcore {
                     String entityName = entityType.getDescription().getString();
                     LOGGER.info(entityName);
                 });
-    }
-
-    @SubscribeEvent
-    public static void handleServerAboutToStart(ServerStartedEvent event) {
-        server = event.getServer();
-
-        server.overworld().getGameRules().getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
     }
 
     @SubscribeEvent
