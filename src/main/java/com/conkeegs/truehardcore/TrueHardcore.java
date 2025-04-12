@@ -26,7 +26,6 @@ import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 
 import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

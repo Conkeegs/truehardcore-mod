@@ -120,9 +120,9 @@ repositories {
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
@@ -138,6 +138,19 @@ dependencies {
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+
+    // Access othermod's classes (but don't bundle it)
+    compileOnly fg.deobf("cave_dweller:cave_dweller:1.20.1-1.6.4")
+    // Optionally, to run it in dev:
+    runtimeOnly fg.deobf("cave_dweller:cave_dweller:1.20.1-1.6.4")
+
+    compileOnly fg.deobf("creeperoverhaul:creeperoverhaul:3.0.2-forge")
+    // Optionally, to run it in dev:
+    runtimeOnly fg.deobf("creeperoverhaul:creeperoverhaul:3.0.2-forge")
+
+    compileOnly fg.deobf("geckolib-forge:geckolib-forge:1.20.1-4.7.1.2")
+    // Optionally, to run it in dev:
+    runtimeOnly fg.deobf("geckolib-forge:geckolib-forge:1.20.1-4.7.1.2")
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
