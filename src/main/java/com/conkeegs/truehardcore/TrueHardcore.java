@@ -35,7 +35,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Zombie;
@@ -221,20 +220,21 @@ public class TrueHardcore {
 
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer) {
-            // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-            List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
+        // if (event.getEntity() instanceof ServerPlayer) {
+        // // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+        // List<ServerPlayer> playerList = new
+        // ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
 
-            for (ServerPlayer player : playerList) {
-                player.connection
-                        .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
-            }
+        // for (ServerPlayer player : playerList) {
+        // player.connection
+        // .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
+        // }
 
-            playerList.clear();
-            server.overworld().disconnect();
+        // playerList.clear();
+        // server.overworld().disconnect();
 
-            shouldShutdownServer = true;
-        }
+        // shouldShutdownServer = true;
+        // }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

@@ -177,6 +177,10 @@ public class CustomExplosion extends Explosion {
                         d9 /= d13;
                         double d14 = (double) getSeenPercent(vec3, entity);
                         double d10 = (1.0D - d12) * d14;
+
+                        LOGGER.debug("Damage: {}",
+                                (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f2 + 1.0D)));
+
                         entity.hurt(this.getDamageSource(),
                                 (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f2 + 1.0D)));
                         double d11;
