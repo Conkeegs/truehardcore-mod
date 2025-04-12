@@ -59,6 +59,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import tech.thatgravyboat.creeperoverhaul.common.entity.base.BaseCreeper;
+import tech.thatgravyboat.creeperoverhaul.common.entity.base.CreeperType;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TrueHardcore.MODID)
@@ -311,6 +312,9 @@ public class TrueHardcore {
         if (oldEntity instanceof BaseCreeper baseCreeper && !(oldEntity instanceof CustomBaseCreeper)) {
             CustomBaseCreeper newEntity = null;
             Level oldEntityLevel = oldEntity.level();
+
+            EntityType grum = (EntityType<? extends BaseCreeper>) baseCreeper.getType();
+            CreeperType grumBum = baseCreeper.type;
 
             newEntity = new CustomBaseCreeper((EntityType<? extends BaseCreeper>) baseCreeper.getType(), oldEntityLevel,
                     baseCreeper.type);
