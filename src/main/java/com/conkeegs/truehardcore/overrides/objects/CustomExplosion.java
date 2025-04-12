@@ -190,6 +190,7 @@ public class CustomExplosion extends Explosion {
                         damage *= seenPercent;
 
                         LOGGER.info("DAMAGE GRUM: {}", (float) damage);
+                        LOGGER.info("DISTANCE GRUM: {}", effectiveDistance);
 
                         entity.hurt(this.getDamageSource(), (float) damage);
                         double d11;
