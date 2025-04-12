@@ -7,10 +7,10 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 
-import com.conkeegs.truehardcore.overrides.entities.CustomEvokerFangs;
-import com.conkeegs.truehardcore.overrides.entities.CustomIronGolem;
-import com.conkeegs.truehardcore.overrides.entities.CustomShulkerBullet;
-import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
+// import com.conkeegs.truehardcore.overrides.entities.CustomEvokerFangs;
+// import com.conkeegs.truehardcore.overrides.entities.CustomIronGolem;
+// import com.conkeegs.truehardcore.overrides.entities.CustomShulkerBullet;
+// import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 
@@ -50,16 +50,16 @@ public class EntityRegistry {
             Entity oldEntity = event.getEntity();
             Level oldEntityLevel = oldEntity.level();
 
-            Utils.replaceEntity(event, new CustomEvokerFangs(
-                    oldEntityLevel,
-                    oldEntity.getX(),
-                    oldEntity.getY(),
-                    oldEntity.getZ(),
-                    oldEntity.getYRot(),
-                    0,
-                    null),
-                    oldEntity,
-                    oldEntityLevel);
+            // Utils.replaceEntity(event, new CustomEvokerFangs(
+            // oldEntityLevel,
+            // oldEntity.getX(),
+            // oldEntity.getY(),
+            // oldEntity.getZ(),
+            // oldEntity.getYRot(),
+            // 0,
+            // null),
+            // oldEntity,
+            // oldEntityLevel);
         });
 
         this.addEntity(SmallFireball.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
@@ -92,16 +92,16 @@ public class EntityRegistry {
             double velocityY = deltaY / distance;
             double velocityZ = deltaZ / distance;
 
-            Utils.replaceEntity(event, new CustomSmallFireball(
-                    oldEntityLevel,
-                    oldEntity.getX(),
-                    oldEntity.getY(),
-                    oldEntity.getZ(),
-                    velocityX,
-                    velocityY,
-                    velocityZ),
-                    oldEntity,
-                    oldEntityLevel);
+            // Utils.replaceEntity(event, new CustomSmallFireball(
+            // oldEntityLevel,
+            // oldEntity.getX(),
+            // oldEntity.getY(),
+            // oldEntity.getZ(),
+            // velocityX,
+            // velocityY,
+            // velocityZ),
+            // oldEntity,
+            // oldEntityLevel);
         });
 
         this.addEntity(ShulkerBullet.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
@@ -115,13 +115,13 @@ public class EntityRegistry {
 
                 Entity target = (Entity) field.get(oldEntity);
 
-                Utils.replaceEntity(event, new CustomShulkerBullet(
-                        oldEntityLevel,
-                        (Shulker) oldEntity.getOwner(),
-                        target,
-                        oldEntity.getMotionDirection().getAxis()),
-                        oldEntity,
-                        oldEntityLevel);
+                // Utils.replaceEntity(event, new CustomShulkerBullet(
+                // oldEntityLevel,
+                // (Shulker) oldEntity.getOwner(),
+                // target,
+                // oldEntity.getMotionDirection().getAxis()),
+                // oldEntity,
+                // oldEntityLevel);
             } catch (Exception e) {
                 LOGGER.error("Error replacing Shulker bullet - {}", e);
             }
@@ -131,15 +131,15 @@ public class EntityRegistry {
             IronGolem oldEntity = (IronGolem) event.getEntity();
             Level oldEntityLevel = oldEntity.level();
 
-            Utils.replaceEntity(event, new CustomIronGolem(
-                    (EntityType<? extends IronGolem>) oldEntity.getType(),
-                    oldEntityLevel,
-                    oldEntity.getX(),
-                    oldEntity.getY(),
-                    oldEntity.getZ(),
-                    oldEntity.getYRot()),
-                    oldEntity,
-                    oldEntityLevel);
+            // Utils.replaceEntity(event, new CustomIronGolem(
+            // (EntityType<? extends IronGolem>) oldEntity.getType(),
+            // oldEntityLevel,
+            // oldEntity.getX(),
+            // oldEntity.getY(),
+            // oldEntity.getZ(),
+            // oldEntity.getYRot()),
+            // oldEntity,
+            // oldEntityLevel);
         });
     }
 
