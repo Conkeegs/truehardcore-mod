@@ -120,7 +120,9 @@ public class TrueHardcore {
 
         String thingThatExplodedClassName = thingThatExploded.getClass().getSimpleName();
 
-        if (modifiedExplosions.containsKey(thingThatExplodedClassName) || thingThatExploded instanceof Creeper) {
+        LOGGER.info("Thing that exploded: '{}'", thingThatExplodedClassName);
+
+        if (modifiedExplosions.containsKey(thingThatExplodedClassName)) {
             event.setCanceled(true);
 
             customExplosion = new CustomExplosion(
