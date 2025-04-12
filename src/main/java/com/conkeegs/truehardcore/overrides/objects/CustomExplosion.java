@@ -180,7 +180,7 @@ public class CustomExplosion extends Explosion {
 
                         double rawDistance = d13;
                         double seenPercent = d14; // exposure
-                        double baseDamage = 19.0;
+                        double baseDamage = 25.0;
                         double dropPerBlock = 2.5;
 
                         double effectiveDistance = Math.max(1.0, rawDistance); // don't go below 1 block
