@@ -13,8 +13,8 @@ public class ExplosionRegistry {
     private ExplosionRegistry() {
         entityMap = new HashMap<>();
 
-        this.addEntity(Creeper.class.getSimpleName(), 5F);
-        this.addEntity(LargeFireball.class.getSimpleName(), 5F);
+        this.addEntity(Creeper.class.getSimpleName(), 8F);
+        this.addEntity(LargeFireball.class.getSimpleName(), 8F);
     }
 
     public static ExplosionRegistry getInstance() {
