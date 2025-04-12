@@ -178,11 +178,20 @@ public class CustomExplosion extends Explosion {
                         double d14 = (double) getSeenPercent(vec3, entity);
                         double d10 = (1.0D - d12) * d14;
 
-                        LOGGER.info("Damage: {}",
-                                (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f2 + 1.0D)));
+                        double rawDistance = d13;
+                        double seenPercent = d14; // exposure
+                        double baseDamage = 32.0;
+                        double dropPerBlock = 3.0;
 
-                        entity.hurt(this.getDamageSource(),
-                                (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f2 + 1.0D)));
+                        double effectiveDistance = Math.max(1.0, rawDistance); // don't go below 1 block
+                        double damage = Math.max(0.0, baseDamage - (effectiveDistance - 1.0) * dropPerBlock);
+
+                        // factor in exposure like vanilla
+                        damage *= seenPercent;
+
+                        LOGGER.info("DAMAGE GRUM: {}", (float) damage);
+
+                        entity.hurt(this.getDamageSource(), (float) damage);
                         double d11;
                         if (entity instanceof LivingEntity) {
                             LivingEntity livingentity = (LivingEntity) entity;
