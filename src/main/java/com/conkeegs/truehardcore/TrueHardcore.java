@@ -300,8 +300,14 @@ public class TrueHardcore {
     }
 
     @SubscribeEvent
-    public static void onSlimeSpawn(MobSpawnEvent event) {
+    public static void onSlimeSpawn(MobSpawnEvent.FinalizeSpawn event) {
         Entity oldEntity = event.getEntity();
+
+        if (!event.isCancelable()) {
+            LOGGER.error("Cannot cancel MobSpawnEvent.FinalizeSpawn event");
+
+            return;
+        }
 
         if (oldEntity instanceof Slime && !(oldEntity instanceof CustomSlime)) {
             String oldEntityClassName = oldEntity.getClass().getSimpleName();
