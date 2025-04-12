@@ -309,7 +309,8 @@ public class TrueHardcore {
             return;
         }
 
-        if (oldEntity instanceof BaseCreeper baseCreeper && !(oldEntity instanceof CustomBaseCreeper)) {
+        if (oldEntity.getClass().getSimpleName().equals("BaseCreeper") && !(oldEntity instanceof CustomBaseCreeper)) {
+            BaseCreeper baseCreeper = (BaseCreeper) oldEntity;
             CustomBaseCreeper newEntity = null;
             Level oldEntityLevel = oldEntity.level();
 
