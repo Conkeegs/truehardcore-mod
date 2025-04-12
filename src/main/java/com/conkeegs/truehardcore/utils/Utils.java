@@ -3,7 +3,7 @@ package com.conkeegs.truehardcore.utils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 
 public final class Utils {
     public static final void replaceEntity(EntityJoinLevelEvent event, Entity newEntity, Entity oldEntity,
@@ -15,7 +15,7 @@ public final class Utils {
         oldEntity.discard();
     }
 
-    public static final void replaceEntity(LivingSpawnEvent event, Entity newEntity, Entity oldEntity,
+    public static final void replaceEntity(MobSpawnEvent event, Entity newEntity, Entity oldEntity,
             Level oldEntityLevel) {
         event.setCanceled(true);
 

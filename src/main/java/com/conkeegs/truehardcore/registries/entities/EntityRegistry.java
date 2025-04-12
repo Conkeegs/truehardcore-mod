@@ -16,6 +16,7 @@ import com.conkeegs.truehardcore.utils.Utils;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Shulker;
@@ -47,7 +48,7 @@ public class EntityRegistry {
 
         this.addEntity(EvokerFangs.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
             Entity oldEntity = event.getEntity();
-            Level oldEntityLevel = oldEntity.level;
+            Level oldEntityLevel = oldEntity.level();
 
             Utils.replaceEntity(event, new CustomEvokerFangs(
                     oldEntityLevel,
@@ -63,38 +64,49 @@ public class EntityRegistry {
 
         this.addEntity(SmallFireball.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
             SmallFireball oldEntity = (SmallFireball) event.getEntity();
-            Level oldEntityLevel = oldEntity.level;
+            Level oldEntityLevel = oldEntity.level();
             Blaze blaze = (Blaze) (oldEntity.getOwner());
 
-            if (blaze != null) {
-                Vec3 target = blaze.getTarget().getEyePosition();
+            if (blaze == null) {
+                LOGGER.error("Blaze null upon spawn");
 
-                double deltaX = target.x - oldEntity.getX();
-                double deltaY = target.y - oldEntity.getY();
-                double deltaZ = target.z - oldEntity.getZ();
-                // Calculate the distance between blaze and player
-                double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-                // Normalize the direction vector to maintain constant speed
-                double velocityX = deltaX / distance;
-                double velocityY = deltaY / distance;
-                double velocityZ = deltaZ / distance;
-
-                Utils.replaceEntity(event, new CustomSmallFireball(
-                        oldEntityLevel,
-                        oldEntity.getX(),
-                        oldEntity.getY(),
-                        oldEntity.getZ(),
-                        velocityX,
-                        velocityY,
-                        velocityZ),
-                        oldEntity,
-                        oldEntityLevel);
+                return;
             }
+
+            LivingEntity blazeTarget = blaze.getTarget();
+
+            if (blazeTarget == null) {
+                LOGGER.error("Blaze target is null");
+
+                return;
+            }
+
+            Vec3 target = blazeTarget.getEyePosition();
+            double deltaX = target.x - oldEntity.getX();
+            double deltaY = target.y - oldEntity.getY();
+            double deltaZ = target.z - oldEntity.getZ();
+            // Calculate the distance between blaze and player
+            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+            // Normalize the direction vector to maintain constant speed
+            double velocityX = deltaX / distance;
+            double velocityY = deltaY / distance;
+            double velocityZ = deltaZ / distance;
+
+            Utils.replaceEntity(event, new CustomSmallFireball(
+                    oldEntityLevel,
+                    oldEntity.getX(),
+                    oldEntity.getY(),
+                    oldEntity.getZ(),
+                    velocityX,
+                    velocityY,
+                    velocityZ),
+                    oldEntity,
+                    oldEntityLevel);
         });
 
         this.addEntity(ShulkerBullet.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
             ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
-            Level oldEntityLevel = oldEntity.level;
+            Level oldEntityLevel = oldEntity.level();
 
             try {
                 Field field = ShulkerBullet.class.getDeclaredField("f_37312_");
@@ -117,7 +129,7 @@ public class EntityRegistry {
 
         this.addEntity(IronGolem.class.getSimpleName(), (EntityJoinLevelEvent event) -> {
             IronGolem oldEntity = (IronGolem) event.getEntity();
-            Level oldEntityLevel = oldEntity.level;
+            Level oldEntityLevel = oldEntity.level();
 
             Utils.replaceEntity(event, new CustomIronGolem(
                     (EntityType<? extends IronGolem>) oldEntity.getType(),

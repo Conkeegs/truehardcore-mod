@@ -51,7 +51,7 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -100,6 +100,8 @@ public class TrueHardcore {
                     String entityName = entityType.getDescription().getString();
                     LOGGER.info(entityName);
                 });
+
+        LOGGER.error("This is a testing error log from truehardcore");
     }
 
     @SubscribeEvent
@@ -112,28 +114,30 @@ public class TrueHardcore {
         Explosion explosion = event.getExplosion();
         Entity thingThatExploded = explosion.getExploder();
 
-        if (thingThatExploded != null) {
-            String thingThatExplodedClassName = thingThatExploded.getClass().getSimpleName();
+        if (thingThatExploded == null) {
+            return;
+        }
 
-            if (modifiedExplosions.containsKey(thingThatExplodedClassName) || thingThatExploded instanceof Creeper) {
-                event.setCanceled(true);
+        String thingThatExplodedClassName = thingThatExploded.getClass().getSimpleName();
 
-                customExplosion = new CustomExplosion(
-                        thingThatExploded.level,
-                        thingThatExploded,
-                        explosion.getDamageSource(),
-                        null,
-                        thingThatExploded.getX(),
-                        thingThatExploded.getY(),
-                        thingThatExploded.getZ(),
-                        modifiedExplosions.get(thingThatExplodedClassName),
-                        false,
-                        Explosion.BlockInteraction.DESTROY);
+        if (modifiedExplosions.containsKey(thingThatExplodedClassName) || thingThatExploded instanceof Creeper) {
+            event.setCanceled(true);
 
-                customExplosion.handleExplosion();
+            customExplosion = new CustomExplosion(
+                    thingThatExploded.level(),
+                    thingThatExploded,
+                    explosion.getDamageSource(),
+                    null,
+                    thingThatExploded.getX(),
+                    thingThatExploded.getY(),
+                    thingThatExploded.getZ(),
+                    modifiedExplosions.get(thingThatExplodedClassName),
+                    false,
+                    Explosion.BlockInteraction.DESTROY);
 
-                customExplosion = null;
-            }
+            customExplosion.handleExplosion();
+
+            customExplosion = null;
         }
     }
 
@@ -163,16 +167,40 @@ public class TrueHardcore {
                 movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
             }
 
-            if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
+            if (entity instanceof Zombie zombie && zombie.isBaby()) {
+                AttributeInstance zombieAttributeInstance = zombie.getAttribute(Attributes.MOVEMENT_SPEED);
+
+                if (zombieAttributeInstance == null) {
+                    LOGGER.error("Zombie movement speed attribute is null, cannot set custom zombie speed");
+
+                    return;
+                }
+
                 movementSpeedAttribute
-                        .setBaseValue(((Zombie) entity).getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-            } else if (entity instanceof Piglin && ((Piglin) entity).isBaby()) {
+                        .setBaseValue(zombieAttributeInstance.getValue());
+            } else if (entity instanceof Piglin piglin && piglin.isBaby()) {
+                AttributeInstance piglinAttributeInstance = piglin.getAttribute(Attributes.MOVEMENT_SPEED);
+
+                if (piglinAttributeInstance == null) {
+                    LOGGER.error("Piglin movement speed attribute is null, cannot set custom piglin speed");
+
+                    return;
+                }
+
                 movementSpeedAttribute
-                        .setBaseValue(((Piglin) entity).getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+                        .setBaseValue(piglinAttributeInstance.getValue());
             }
 
             if (entity instanceof Wolf wolf) {
-                wolf.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20.0D);
+                AttributeInstance wolfAttributeInstance = wolf.getAttribute(Attributes.MAX_HEALTH);
+
+                if (wolfAttributeInstance == null) {
+                    LOGGER.error("Wolf health attribute is null, cannot set custom wolf health");
+
+                    return;
+                }
+
+                wolfAttributeInstance.setBaseValue(20.0D);
             }
         }
 
@@ -270,18 +298,24 @@ public class TrueHardcore {
     }
 
     @SubscribeEvent
-    public static void onSlimeSpawn(LivingSpawnEvent event) {
+    public static void onSlimeSpawn(MobSpawnEvent event) {
         Entity oldEntity = event.getEntity();
 
         if (oldEntity instanceof Slime && !(oldEntity instanceof CustomSlime)) {
             String oldEntityClassName = oldEntity.getClass().getSimpleName();
             CustomSlime newEntity = null;
-            Level oldEntityLevel = oldEntity.level;
+            Level oldEntityLevel = oldEntity.level();
 
             if (oldEntityClassName.equals("Slime")) {
                 newEntity = new CustomSlime(((Slime) oldEntity).getType(), oldEntityLevel);
             } else if (oldEntityClassName.equals("MagmaCube")) {
                 newEntity = new CustomMagmaCube((EntityType<? extends MagmaCube>) oldEntity.getType(), oldEntityLevel);
+            }
+
+            if (newEntity == null) {
+                LOGGER.error("Custom slime or magmacube is null, cannot replace default slime");
+
+                return;
             }
 
             Utils.replaceEntity(event, newEntity,
