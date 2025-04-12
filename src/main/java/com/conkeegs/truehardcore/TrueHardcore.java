@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
-import com.conkeegs.truehardcore.overrides.entities.CustomBaseCreeper;
 import com.conkeegs.truehardcore.overrides.entities.CustomMagmaCube;
 import com.conkeegs.truehardcore.overrides.entities.CustomSlime;
 import com.conkeegs.truehardcore.overrides.objects.CustomExplosion;
@@ -58,8 +57,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import tech.thatgravyboat.creeperoverhaul.common.entity.base.BaseCreeper;
-import tech.thatgravyboat.creeperoverhaul.common.entity.base.CreeperType;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TrueHardcore.MODID)
@@ -309,26 +306,27 @@ public class TrueHardcore {
             return;
         }
 
-        if (oldEntity.getClass().getSimpleName().equals("BaseCreeper") && !(oldEntity instanceof CustomBaseCreeper)) {
-            BaseCreeper baseCreeper = (BaseCreeper) oldEntity;
-            CustomBaseCreeper newEntity = null;
-            Level oldEntityLevel = oldEntity.level();
+        // if (oldEntity instanceof BaseCreeper baseCreeper && !(oldEntity instanceof
+        // CustomBaseCreeper)) {
+        // CustomBaseCreeper newEntity = null;
+        // Level oldEntityLevel = oldEntity.level();
 
-            EntityType grum = (EntityType<? extends BaseCreeper>) baseCreeper.getType();
-            CreeperType grumBum = baseCreeper.type;
+        // EntityType grum = (EntityType<? extends BaseCreeper>) baseCreeper.getType();
+        // CreeperType grumBum = baseCreeper.type;
 
-            newEntity = new CustomBaseCreeper((EntityType<? extends BaseCreeper>) baseCreeper.getType(), oldEntityLevel,
-                    baseCreeper.type);
+        // newEntity = new CustomBaseCreeper((EntityType<? extends BaseCreeper>)
+        // baseCreeper.getType(), oldEntityLevel,
+        // baseCreeper.type);
 
-            Utils.replaceEntity(event, newEntity,
-                    oldEntity,
-                    oldEntityLevel);
+        // Utils.replaceEntity(event, newEntity,
+        // oldEntity,
+        // oldEntityLevel);
 
-            newEntity.setYRot(oldEntity.getYRot() * (180F / (float) Math.PI));
-            newEntity.setPos(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ());
+        // newEntity.setYRot(oldEntity.getYRot() * (180F / (float) Math.PI));
+        // newEntity.setPos(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ());
 
-            return;
-        }
+        // return;
+        // }
 
         if (oldEntity instanceof Slime && !(oldEntity instanceof CustomSlime)) {
             String oldEntityClassName = oldEntity.getClass().getSimpleName();
