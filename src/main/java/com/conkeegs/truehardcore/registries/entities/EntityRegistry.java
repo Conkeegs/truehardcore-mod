@@ -15,6 +15,7 @@ import com.conkeegs.truehardcore.utils.Utils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraft.world.entity.monster.Creeper;
@@ -25,6 +26,9 @@ import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.SmallFireball;
@@ -71,7 +75,8 @@ public class EntityRegistry {
      * List of all the types of zombies we want to modify.
      */
     private static final ArrayList<String> zombieDescriptionIds = new ArrayList<String>(
-            Arrays.asList("entity.minecraft.zombie", "entity.minecraft.zombie_villager", "entity.minecraft.drowned"));
+            Arrays.asList("entity.minecraft.zombie", "entity.minecraft.zombie_villager", "entity.minecraft.drowned",
+                    "entity.minecraft.husk"));
     /**
      * List of all the types of spiders we want to modify.
      */
@@ -238,6 +243,42 @@ public class EntityRegistry {
 
             Utils.modifyAttackDamage(guardian, 10.0D);
             Utils.modifySpeed(guardian, 0.55F);
+        });
+        this.addEntity("entity.minecraft.hoglin", (EntityJoinLevelEvent event) -> {
+            Hoglin hoglin = (Hoglin) event.getEntity();
+
+            Utils.modifyAttackDamage(hoglin, 10.0D);
+            Utils.modifySpeed(hoglin, 0.33F);
+        });
+        this.addEntity("entity.minecraft.panda", (EntityJoinLevelEvent event) -> {
+            Panda panda = (Panda) event.getEntity();
+
+            Utils.modifyAttackDamage(panda, 12.0D);
+            Utils.modifySpeed(panda, 0.23F);
+        });
+        this.addEntity("entity.minecraft.piglin", (EntityJoinLevelEvent event) -> {
+            Piglin piglin = (Piglin) event.getEntity();
+
+            Utils.modifyAttackDamage(piglin, 7.0D);
+
+            // don't modify speed of baby as they will become ungodly fast
+            if (piglin.isBaby()) {
+                return;
+            }
+
+            Utils.modifySpeed(piglin, Utils.getRandomFromArrayList(zombieSpeeds));
+        });
+        this.addEntity("entity.minecraft.piglin_brute", (EntityJoinLevelEvent event) -> {
+            PiglinBrute piglinBrute = (PiglinBrute) event.getEntity();
+
+            Utils.modifyAttackDamage(piglinBrute, 5.0D);
+
+            // don't modify speed of baby as they will become ungodly fast
+            if (piglinBrute.isBaby()) {
+                return;
+            }
+
+            Utils.modifySpeed(piglinBrute, Utils.getRandomFromArrayList(zombieSpeeds));
         });
     }
 
