@@ -16,6 +16,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
@@ -64,6 +66,11 @@ public class EntityRegistry {
      */
     private static final ArrayList<String> zombieDescriptionIds = new ArrayList<String>(
             Arrays.asList("entity.minecraft.zombie", "entity.minecraft.zombie_villager"));
+    /**
+     * List of all the types of spiders we want to modify.
+     */
+    private static final ArrayList<String> spiderDescriptionIds = new ArrayList<String>(
+            Arrays.asList("entity.minecraft.cave_spider", "entity.minecraft.spider"));
 
     /**
      * Private {@code EntityRegistry} singleton constructor.
@@ -192,6 +199,20 @@ public class EntityRegistry {
 
             Utils.modifyAttackDamage(blaze, 11.0D);
         });
+
+        for (String spiderDescString : spiderDescriptionIds) {
+            this.addEntity(spiderDescString, (EntityJoinLevelEvent event) -> {
+                Spider spider = (Spider) event.getEntity();
+
+                Utils.modifyAttackDamage(spider, 8.0D);
+
+                if (spider instanceof CaveSpider) {
+                    return;
+                }
+
+                Utils.modifySpeed(spider, 0.33F);
+            });
+        }
     }
 
     /**

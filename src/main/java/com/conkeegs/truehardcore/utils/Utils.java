@@ -89,7 +89,7 @@ public final class Utils {
      * @param entity the living entity to modify
      * @param speed  the speed to set
      */
-    public static final void modifySpeed(LivingEntity entity, double speed) {
+    public static final void modifySpeed(LivingEntity entity, float speed) {
         AttributeInstance speedAttribute = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 
         if (speedAttribute == null) {
