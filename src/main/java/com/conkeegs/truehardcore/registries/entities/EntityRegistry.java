@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.animal.PolarBear;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
@@ -33,8 +34,11 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.WitherSkeleton;
+import net.minecraft.world.entity.monster.Zoglin;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
@@ -85,7 +89,7 @@ public class EntityRegistry {
      */
     private static final ArrayList<String> zombieDescriptionIds = new ArrayList<String>(
             Arrays.asList("entity.minecraft.zombie", "entity.minecraft.zombie_villager", "entity.minecraft.drowned",
-                    "entity.minecraft.husk"));
+                    "entity.minecraft.husk", "entity.minecraft.zombified_piglin"));
     /**
      * List of all the types of spiders we want to modify.
      */
@@ -211,7 +215,7 @@ public class EntityRegistry {
             this.addEntity(zombieDescriptionId, (EntityJoinLevelEvent event) -> {
                 Zombie zombie = (Zombie) event.getEntity();
 
-                Utils.modifyAttackDamage(zombie, 9.0D);
+                Utils.modifyAttackDamage(zombie, (!(zombie instanceof ZombifiedPiglin)) ? 9.0D : 7.0D);
 
                 // don't modify speed of baby zombies as they will become ungodly fast
                 if (zombie.isBaby()) {
@@ -339,11 +343,26 @@ public class EntityRegistry {
         this.addEntity("entity.minecraft.vex", (EntityJoinLevelEvent event) -> {
             Utils.modifyAttackDamage((Vex) event.getEntity(), 6.5D);
         });
+        this.addEntity("entity.minecraft.witch", (EntityJoinLevelEvent event) -> {
+            Utils.modifySpeed((Witch) event.getEntity(), 0.32F);
+        });
         this.addEntity("entity.minecraft.vindicator", (EntityJoinLevelEvent event) -> {
             Vindicator vindicator = (Vindicator) event.getEntity();
 
-            Utils.modifyAttackDamage(vindicator, 6.0D);
+            // Utils.modifyAttackDamage(vindicator, 6.0D);
             Utils.modifySpeed(vindicator, 0.37F);
+        });
+        this.addEntity("entity.minecraft.wolf", (EntityJoinLevelEvent event) -> {
+            Wolf wolf = (Wolf) event.getEntity();
+
+            Utils.modifyAttackDamage(wolf, 10.0D);
+            Utils.modifySpeed(wolf, 0.35F);
+        });
+        this.addEntity("entity.minecraft.zoglin", (EntityJoinLevelEvent event) -> {
+            Zoglin zoglin = (Zoglin) event.getEntity();
+
+            Utils.modifyAttackDamage(zoglin, 11.0D);
+            Utils.modifySpeed(zoglin, 0.35F);
         });
     }
 
