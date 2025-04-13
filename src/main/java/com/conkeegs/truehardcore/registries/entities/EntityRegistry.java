@@ -16,6 +16,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Panda;
+import net.minecraft.world.entity.animal.PolarBear;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraft.world.entity.monster.Creeper;
@@ -24,7 +26,13 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -82,6 +90,11 @@ public class EntityRegistry {
      */
     private static final ArrayList<String> spiderDescriptionIds = new ArrayList<String>(
             Arrays.asList("entity.minecraft.cave_spider", "entity.minecraft.spider"));
+    /**
+     * List of all the types of skeletons we want to modify.
+     */
+    private static final ArrayList<String> skeletonDescriptionIds = new ArrayList<String>(
+            Arrays.asList("entity.minecraft.skeleton", "entity.minecraft.wither_skeleton", "entity.minecraft.stray"));
 
     /**
      * Private {@code EntityRegistry} singleton constructor.
@@ -279,6 +292,51 @@ public class EntityRegistry {
             }
 
             Utils.modifySpeed(piglinBrute, Utils.getRandomFromArrayList(zombieSpeeds));
+        });
+        this.addEntity("entity.minecraft.pillager", (EntityJoinLevelEvent event) -> {
+            Utils.modifyAttackDamage((Pillager) event.getEntity(), 8.0D);
+        });
+        this.addEntity("entity.minecraft.polar_bear", (EntityJoinLevelEvent event) -> {
+            PolarBear polarBear = (PolarBear) event.getEntity();
+
+            Utils.modifyAttackDamage(polarBear, 10.0D);
+            Utils.modifySpeed(polarBear, 0.3F);
+        });
+        this.addEntity("entity.minecraft.ravager", (EntityJoinLevelEvent event) -> {
+            Ravager ravager = (Ravager) event.getEntity();
+
+            Utils.modifyAttackDamage(ravager, 14.0D);
+            Utils.modifySpeed(ravager, 0.35F);
+        });
+        this.addEntity("entity.minecraft.silverfish", (EntityJoinLevelEvent event) -> {
+            Silverfish silverfish = (Silverfish) event.getEntity();
+
+            Utils.modifyAttackDamage(silverfish, 4.0D);
+            Utils.modifySpeed(silverfish, 0.3F);
+        });
+        this.addEntity("entity.minecraft.slime", (EntityJoinLevelEvent event) -> {
+            Slime slime = (Slime) event.getEntity();
+
+            Utils.modifyAttackDamage(slime, 8.0D);
+            Utils.modifySpeed(slime, 0.6F);
+        });
+
+        for (String skeletonDescriptionId : skeletonDescriptionIds) {
+            this.addEntity(skeletonDescriptionId, (EntityJoinLevelEvent event) -> {
+                AbstractSkeleton skeleton = (AbstractSkeleton) event.getEntity();
+
+                Utils.modifySpeed(skeleton, 0.3F);
+
+                if (!(skeleton instanceof WitherSkeleton)) {
+                    return;
+                }
+
+                Utils.modifyAttackDamage(skeleton, 7.3D);
+            });
+        }
+
+        this.addEntity("entity.minecraft.vex", (EntityJoinLevelEvent event) -> {
+            Utils.modifyAttackDamage((Vex) event.getEntity(), 6.5D);
         });
     }
 
