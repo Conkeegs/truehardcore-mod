@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -195,9 +196,7 @@ public class EntityRegistry {
         }
 
         this.addEntity("entity.minecraft.blaze", (EntityJoinLevelEvent event) -> {
-            Blaze blaze = (Blaze) event.getEntity();
-
-            Utils.modifyAttackDamage(blaze, 11.0D);
+            Utils.modifyAttackDamage((Blaze) event.getEntity(), 11.0D);
         });
 
         for (String spiderDescString : spiderDescriptionIds) {
@@ -213,6 +212,10 @@ public class EntityRegistry {
                 Utils.modifySpeed(spider, 0.33F);
             });
         }
+
+        this.addEntity("entity.minecraft.creeper", (EntityJoinLevelEvent event) -> {
+            Utils.modifySpeed((Creeper) event.getEntity(), Utils.getRandomFromArrayList(creeperSpeeds));
+        });
     }
 
     /**
