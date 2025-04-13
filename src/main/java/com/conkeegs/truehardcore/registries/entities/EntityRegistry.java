@@ -186,6 +186,12 @@ public class EntityRegistry {
                 Utils.modifySpeed(zombie, Utils.getRandomFromArrayList(zombieSpeeds));
             });
         }
+
+        this.addEntity("entity.minecraft.blaze", (EntityJoinLevelEvent event) -> {
+            Blaze blaze = (Blaze) event.getEntity();
+
+            Utils.modifyAttackDamage(blaze, 11.0D);
+        });
     }
 
     /**
