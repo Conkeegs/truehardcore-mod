@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 
+import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 
@@ -163,16 +164,16 @@ public class EntityRegistry {
             double velocityY = deltaY / distance;
             double velocityZ = deltaZ / distance;
 
-            // Utils.replaceEntity(event, new CustomSmallFireball(
-            // oldEntityLevel,
-            // oldEntity.getX(),
-            // oldEntity.getY(),
-            // oldEntity.getZ(),
-            // velocityX,
-            // velocityY,
-            // velocityZ),
-            // oldEntity,
-            // oldEntityLevel);
+            Utils.replaceEntity(event, new CustomSmallFireball(
+                    oldEntityLevel,
+                    oldEntity.getX(),
+                    oldEntity.getY(),
+                    oldEntity.getZ(),
+                    velocityX,
+                    velocityY,
+                    velocityZ),
+                    oldEntity,
+                    oldEntityLevel);
         });
         this.addEntity("entity.minecraft.shulker_bullet", (EntityJoinLevelEvent event) -> {
             ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
