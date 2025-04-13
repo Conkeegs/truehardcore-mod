@@ -32,6 +32,7 @@ import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
@@ -337,6 +338,12 @@ public class EntityRegistry {
 
         this.addEntity("entity.minecraft.vex", (EntityJoinLevelEvent event) -> {
             Utils.modifyAttackDamage((Vex) event.getEntity(), 6.5D);
+        });
+        this.addEntity("entity.minecraft.vindicator", (EntityJoinLevelEvent event) -> {
+            Vindicator vindicator = (Vindicator) event.getEntity();
+
+            Utils.modifyAttackDamage(vindicator, 6.0D);
+            Utils.modifySpeed(vindicator, 0.37F);
         });
     }
 
