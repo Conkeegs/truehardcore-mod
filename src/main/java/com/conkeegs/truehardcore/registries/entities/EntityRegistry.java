@@ -59,6 +59,11 @@ public class EntityRegistry {
             "entity.twilightforest.ice_arrow",
             "entity.twilightforest.seeker_arrow",
             "entity.quark.torch_arrow"));
+    /**
+     * List of all the types of zombies we want to modify.
+     */
+    private static final ArrayList<String> zombieDescriptionIds = new ArrayList<String>(
+            Arrays.asList("entity.minecraft.zombie", "entity.minecraft.zombie_villager"));
 
     /**
      * Private {@code EntityRegistry} singleton constructor.
@@ -166,12 +171,21 @@ public class EntityRegistry {
             // oldEntity,
             // oldEntityLevel);
         });
-        this.addEntity("entity.minecraft.zombie", (EntityJoinLevelEvent event) -> {
-            Zombie zombie = (Zombie) event.getEntity();
 
-            Utils.modifyAttackDamage(zombie, 9.0D);
-            Utils.modifySpeed(zombie, Utils.getRandomFromArrayList(zombieSpeeds));
-        });
+        for (String zombieDescriptionId : zombieDescriptionIds) {
+            this.addEntity(zombieDescriptionId, (EntityJoinLevelEvent event) -> {
+                Zombie zombie = (Zombie) event.getEntity();
+
+                Utils.modifyAttackDamage(zombie, 9.0D);
+
+                // don't modify speed of baby zombies as they will become ungodly fast
+                if (zombie.isBaby()) {
+                    return;
+                }
+
+                Utils.modifySpeed(zombie, Utils.getRandomFromArrayList(zombieSpeeds));
+            });
+        }
     }
 
     /**
