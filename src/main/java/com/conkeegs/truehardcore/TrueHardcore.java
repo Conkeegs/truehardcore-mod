@@ -9,36 +9,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Random;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
-import com.conkeegs.truehardcore.overrides.entities.CustomMagmaCube;
-import com.conkeegs.truehardcore.overrides.entities.CustomSlime;
 import com.conkeegs.truehardcore.overrides.objects.CustomExplosion;
 import com.conkeegs.truehardcore.registries.entities.EntityRegistry;
 import com.conkeegs.truehardcore.registries.explosions.ExplosionRegistry;
-import com.conkeegs.truehardcore.registries.mobs.MobRegistry;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 
 import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.monster.MagmaCube;
-import net.minecraft.world.entity.monster.Slime;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.levelgen.RandomSupport;
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,7 +33,6 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -56,8 +41,10 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
+/**
+ * Mod that makes Minecraft sooooo hard...eeeeeveryone deet...
+ */
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TrueHardcore.MODID)
 @Mod.EventBusSubscriber(modid = "truehardcore")
@@ -66,155 +53,188 @@ public class TrueHardcore {
     public static final String MODID = "truehardcore";
     // custom logga
     private static final Logger LOGGER = TruestLogger.getLogger();
-
-    private static final Map<String, MobRegistry.MobProperties> modifiedMobs = MobRegistry.getInstance().getAllMobs();
     private static final Map<String, Consumer<EntityJoinLevelEvent>> modifiedEntities = EntityRegistry.getInstance()
             .getAllEntities();
     private static final Map<String, Float> modifiedExplosions = ExplosionRegistry.getInstance().getAllEntities();
-
     private static boolean shouldShutdownServer = false;
-
     private static CustomExplosion customExplosion = null;
-
     private static MinecraftServer server;
 
+    /**
+     * Truehardcore constructor.
+     */
     public TrueHardcore() {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    /**
+     * Handle server starting.
+     *
+     * @param event server start event
+     */
     @SubscribeEvent
     public static void handleServerStarted(ServerStartedEvent event) {
-        server = event.getServer();
+        // sleeping not allowed, so we don't want phantoms spawning
+        event.getServer().overworld().getGameRules().getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
 
-        server.overworld().getGameRules().getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
-
-        // print mobs
-        ForgeRegistries.ENTITY_TYPES.getValues().stream()
-                .filter(entityType -> entityType.canSummon())
-                .forEach(entityType -> {
-                    String entityName = entityType.getDescription().getString();
-                    LOGGER.info(entityName);
-                });
-
-        LOGGER.error("This is a testing error log from truehardcore");
+        Utils.printAllEntities();
     }
 
+    /**
+     * Handle sleep events.
+     *
+     * @param event sleep event
+     */
     @SubscribeEvent
     public static void onSleep(SleepingTimeCheckEvent event) {
+        // don't allow sleeping...
         event.setResult(Result.DENY);
     }
 
+    /**
+     * Handle explosion detonation events.
+     *
+     * @param event explosion detonation event
+     */
     @SubscribeEvent
     public static void onExplosionDetonate(ExplosionEvent.Start event) {
         Explosion explosion = event.getExplosion();
         Entity thingThatExploded = explosion.getExploder();
 
         if (thingThatExploded == null) {
+            LOGGER.error("Explosion detonation had a null exploder.");
+
             return;
         }
 
         String thingThatExplodedClassName = thingThatExploded.getClass().getSimpleName();
 
-        LOGGER.info("Thing that exploded: '{}'", thingThatExplodedClassName);
-
-        if (modifiedExplosions.containsKey(thingThatExplodedClassName)) {
-            event.setCanceled(true);
-
-            customExplosion = new CustomExplosion(
-                    thingThatExploded.level(),
-                    thingThatExploded,
-                    explosion.getDamageSource(),
-                    null,
-                    thingThatExploded.getX(),
-                    thingThatExploded.getY(),
-                    thingThatExploded.getZ(),
-                    modifiedExplosions.get(thingThatExplodedClassName),
-                    false,
-                    Explosion.BlockInteraction.DESTROY);
-
-            customExplosion.handleExplosion();
-
-            customExplosion = null;
+        // make sure entity that exploded is something we want to assign a custom
+        // explosion to
+        if (!modifiedExplosions.containsKey(thingThatExplodedClassName)) {
+            return;
         }
+
+        // cancel the explosion and replace it with out custom one
+        event.setCanceled(true);
+
+        customExplosion = new CustomExplosion(
+                thingThatExploded.level(),
+                thingThatExploded,
+                explosion.getDamageSource(),
+                null,
+                thingThatExploded.getX(),
+                thingThatExploded.getY(),
+                thingThatExploded.getZ(),
+                modifiedExplosions.get(thingThatExplodedClassName),
+                false,
+                Explosion.BlockInteraction.DESTROY);
+
+        customExplosion.handleExplosion();
+
+        customExplosion = null;
     }
 
+    /**
+     * Handle entity spawn events.
+     *
+     * @param event entity spawn event
+     */
     @SubscribeEvent
     public static void onEntitySpawn(EntityJoinLevelEvent event) {
-        Entity entity = event.getEntity();
-        String entityClassName = entity.getClass().getSimpleName();
+        String entityDescriptionId = event.getEntity().getType().getDescriptionId();
 
-        if (modifiedMobs.containsKey(entityClassName)) {
-            handleLivingEntitySpawn(entity, entityClassName);
-        } else if (modifiedEntities.containsKey(entityClassName)) {
-            handleEntitySpawn(event, entityClassName);
+        // if it's an entity we want to modify
+        if (modifiedEntities.containsKey(entityDescriptionId)) {
+            modifiedEntities.get(entityDescriptionId).accept(event);
         }
     }
 
-    public static void handleLivingEntitySpawn(Entity entity, String entityClassName) {
-        MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
-        Float mobSpeed = mobProperties.getSpeed();
-        AttributeInstance movementSpeedAttribute = ((LivingEntity) entity).getAttribute(Attributes.MOVEMENT_SPEED);
+    /**
+     * Handle the spawn event of a living mob we want to modify properties on.
+     *
+     * @param entity          the living entity to modify
+     * @param entityClassName the living entity's class's simple name
+     */
+    // public static void handleLivingEntitySpawn(Entity entity, String
+    // entityClassName) {
+    // MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
+    // AttributeInstance attackDamageAttribute = ((LivingEntity)
+    // entity).getAttribute(Attributes.ATTACK_DAMAGE);
+    // Double mobDamage = mobProperties.getDamage();
 
-        if (movementSpeedAttribute != null) {
-            if (mobSpeed != null) {
-                movementSpeedAttribute.setBaseValue(mobSpeed);
-            }
+    // // modify mob damage if it implements an attack damage attribute
+    // if (attackDamageAttribute != null && mobDamage != null) {
+    // attackDamageAttribute.setBaseValue(mobDamage);
+    // }
 
-            if (mobProperties.getRandomSpeeds() != null) {
-                movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
-            }
+    // AttributeInstance movementSpeedAttribute = ((LivingEntity)
+    // entity).getAttribute(Attributes.MOVEMENT_SPEED);
 
-            if (entity instanceof Zombie zombie && zombie.isBaby()) {
-                AttributeInstance zombieAttributeInstance = zombie.getAttribute(Attributes.MOVEMENT_SPEED);
+    // // skip processing if mob does not implement a speed attribute
+    // if (movementSpeedAttribute == null) {
+    // return;
+    // }
 
-                if (zombieAttributeInstance == null) {
-                    LOGGER.error("Zombie movement speed attribute is null, cannot set custom zombie speed");
+    // Float mobSpeed = mobProperties.getSpeed();
 
-                    return;
-                }
+    // if (mobSpeed != null) {
+    // movementSpeedAttribute.setBaseValue(mobSpeed);
+    // }
 
-                movementSpeedAttribute
-                        .setBaseValue(zombieAttributeInstance.getValue());
-            } else if (entity instanceof Piglin piglin && piglin.isBaby()) {
-                AttributeInstance piglinAttributeInstance = piglin.getAttribute(Attributes.MOVEMENT_SPEED);
+    // // we want some mobs to have random speeds (like zombies), so check for it
+    // if (mobProperties.getRandomSpeeds() != null) {
+    // movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
+    // }
 
-                if (piglinAttributeInstance == null) {
-                    LOGGER.error("Piglin movement speed attribute is null, cannot set custom piglin speed");
+    // if (entity instanceof Zombie zombie && zombie.isBaby()) {
+    // AttributeInstance zombieAttributeInstance =
+    // zombie.getAttribute(Attributes.MOVEMENT_SPEED);
 
-                    return;
-                }
+    // if (zombieAttributeInstance == null) {
+    // LOGGER.error("Zombie movement speed attribute is null, cannot set custom
+    // zombie speed");
 
-                movementSpeedAttribute
-                        .setBaseValue(piglinAttributeInstance.getValue());
-            }
+    // return;
+    // }
 
-            if (entity instanceof Wolf wolf) {
-                AttributeInstance wolfAttributeInstance = wolf.getAttribute(Attributes.MAX_HEALTH);
+    // movementSpeedAttribute
+    // .setBaseValue(zombieAttributeInstance.getValue());
+    // } else if (entity instanceof Piglin piglin && piglin.isBaby()) {
+    // AttributeInstance piglinAttributeInstance =
+    // piglin.getAttribute(Attributes.MOVEMENT_SPEED);
 
-                if (wolfAttributeInstance == null) {
-                    LOGGER.error("Wolf health attribute is null, cannot set custom wolf health");
+    // if (piglinAttributeInstance == null) {
+    // LOGGER.error("Piglin movement speed attribute is null, cannot set custom
+    // piglin speed");
 
-                    return;
-                }
+    // return;
+    // }
 
-                wolfAttributeInstance.setBaseValue(20.0D);
-            }
-        }
+    // movementSpeedAttribute
+    // .setBaseValue(piglinAttributeInstance.getValue());
+    // }
 
-        AttributeInstance attackDamageAttribute = ((LivingEntity) entity).getAttribute(Attributes.ATTACK_DAMAGE);
+    // if (entity instanceof Wolf wolf) {
+    // AttributeInstance wolfAttributeInstance =
+    // wolf.getAttribute(Attributes.MAX_HEALTH);
 
-        if (attackDamageAttribute != null && mobProperties.getDamage() != null) {
-            attackDamageAttribute.setBaseValue(mobProperties.getDamage());
-        }
-    }
+    // if (wolfAttributeInstance == null) {
+    // LOGGER.error("Wolf health attribute is null, cannot set custom wolf health");
 
-    public static void handleEntitySpawn(EntityJoinLevelEvent event, String entityClassName) {
-        Consumer<EntityJoinLevelEvent> callback = modifiedEntities.get(entityClassName);
+    // return;
+    // }
 
-        callback.accept(event);
-    }
+    // wolfAttributeInstance.setBaseValue(20.0D);
+    // }
+    // }
 
+    /**
+     * Handle living entity death events.
+     *
+     * @param event the living entity death event
+     */
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event) {
         // if (event.getEntity() instanceof ServerPlayer) {
@@ -222,6 +242,7 @@ public class TrueHardcore {
         // List<ServerPlayer> playerList = new
         // ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
 
+        // // disconnect everyone and make sure they can see the reason of the death
         // for (ServerPlayer player : playerList) {
         // player.connection
         // .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
@@ -234,13 +255,26 @@ public class TrueHardcore {
         // }
     }
 
+    /**
+     * Handle server tick events.
+     *
+     * @param event the server tick event
+     */
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void handleTick(ServerTickEvent event) {
+        // make sure we're at the end of the current tick and only then handle the
+        // world's
+        // deletion
         if (event.phase == Phase.END && shouldShutdownServer) {
             handleWorldDeletion(event);
         }
     }
 
+    /**
+     * Handle world deletion after a player dies.
+     *
+     * @param event the server tick event to delete the world at the end of
+     */
     public static void handleWorldDeletion(ServerTickEvent event) {
         try {
             server.stopServer();
@@ -254,19 +288,22 @@ public class TrueHardcore {
 
         List<String> worldsToDelete = Arrays.asList("world", "world_nether", "world_the_end");
 
+        // delete all world folders in "worldsToDelete"
         for (String worldName : worldsToDelete) {
             File worldFolder = new File(worldName);
 
-            if (worldFolder != null && worldFolder.exists()) {
-                try {
-                    FileUtils.deleteDirectory(worldFolder);
+            if (!worldFolder.exists()) {
+                LOGGER.error("World directory '{}' could not be deleted since it doesn't exist", worldName);
 
-                    LOGGER.info("World '{}' deleted successfully.", worldFolder.getName());
-                } catch (IOException ioe) {
-                    LOGGER.error("Error deleting world folder - '{}'", ioe.getMessage());
-                }
-            } else {
-                LOGGER.info("World folder '{}' not found. Skipping it.", worldName);
+                continue;
+            }
+
+            try {
+                FileUtils.deleteDirectory(worldFolder);
+
+                LOGGER.info("World '{}' deleted successfully.", worldFolder.getName());
+            } catch (IOException ioe) {
+                LOGGER.error("Error deleting world folder - '{}'", ioe.getMessage());
             }
         }
 
@@ -281,6 +318,7 @@ public class TrueHardcore {
             return;
         }
 
+        // reset the overworld seed to something random in the server properties file
         properties.setProperty("level-seed", String.valueOf(RandomSupport.generateUniqueSeed()));
 
         try (FileOutputStream outputStream = new FileOutputStream(propertiesPath)) {
@@ -296,66 +334,74 @@ public class TrueHardcore {
         shouldShutdownServer = false;
     }
 
-    @SubscribeEvent
-    public static void onSlimeSpawn(MobSpawnEvent.FinalizeSpawn event) {
-        Entity oldEntity = event.getEntity();
+    /**
+     * Handle slime spawn events.
+     *
+     * @param event the slime spawn event
+     */
+    // @SubscribeEvent
+    // public static void onSlimeSpawn(MobSpawnEvent.FinalizeSpawn event) {
+    // Entity oldEntity = event.getEntity();
 
-        if (!event.isCancelable()) {
-            LOGGER.error("Cannot cancel MobSpawnEvent.FinalizeSpawn event");
+    // if (!event.isCancelable()) {
+    // LOGGER.error("Cannot cancel MobSpawnEvent.FinalizeSpawn event");
 
-            return;
-        }
+    // return;
+    // }
 
-        // if (oldEntity instanceof BaseCreeper baseCreeper && !(oldEntity instanceof
-        // CustomBaseCreeper)) {
-        // CustomBaseCreeper newEntity = null;
-        // Level oldEntityLevel = oldEntity.level();
+    // // if (oldEntity instanceof BaseCreeper baseCreeper && !(oldEntity instanceof
+    // // CustomBaseCreeper)) {
+    // // CustomBaseCreeper newEntity = null;
+    // // Level oldEntityLevel = oldEntity.level();
 
-        // EntityType grum = (EntityType<? extends BaseCreeper>) baseCreeper.getType();
-        // CreeperType grumBum = baseCreeper.type;
+    // // EntityType grum = (EntityType<? extends BaseCreeper>)
+    // baseCreeper.getType();
+    // // CreeperType grumBum = baseCreeper.type;
 
-        // newEntity = new CustomBaseCreeper((EntityType<? extends BaseCreeper>)
-        // baseCreeper.getType(), oldEntityLevel,
-        // baseCreeper.type);
+    // // newEntity = new CustomBaseCreeper((EntityType<? extends BaseCreeper>)
+    // // baseCreeper.getType(), oldEntityLevel,
+    // // baseCreeper.type);
 
-        // Utils.replaceEntity(event, newEntity,
-        // oldEntity,
-        // oldEntityLevel);
+    // // Utils.replaceEntity(event, newEntity,
+    // // oldEntity,
+    // // oldEntityLevel);
 
-        // newEntity.setYRot(oldEntity.getYRot() * (180F / (float) Math.PI));
-        // newEntity.setPos(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ());
+    // // newEntity.setYRot(oldEntity.getYRot() * (180F / (float) Math.PI));
+    // // newEntity.setPos(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ());
 
-        // return;
-        // }
+    // // return;
+    // // }
 
-        if (oldEntity instanceof Slime && !(oldEntity instanceof CustomSlime)) {
-            String oldEntityClassName = oldEntity.getClass().getSimpleName();
-            CustomSlime newEntity = null;
-            Level oldEntityLevel = oldEntity.level();
+    // if (oldEntity instanceof Slime && !(oldEntity instanceof CustomSlime)) {
+    // String oldEntityClassName = oldEntity.getClass().getSimpleName();
+    // CustomSlime newEntity = null;
+    // Level oldEntityLevel = oldEntity.level();
 
-            if (oldEntityClassName.equals("Slime")) {
-                newEntity = new CustomSlime(((Slime) oldEntity).getType(), oldEntityLevel);
-            } else if (oldEntityClassName.equals("MagmaCube")) {
-                newEntity = new CustomMagmaCube((EntityType<? extends MagmaCube>) oldEntity.getType(), oldEntityLevel);
-            }
+    // if (oldEntityClassName.equals("Slime")) {
+    // newEntity = new CustomSlime(((Slime) oldEntity).getType(), oldEntityLevel);
+    // } else if (oldEntityClassName.equals("MagmaCube")) {
+    // newEntity = new CustomMagmaCube((EntityType<? extends MagmaCube>)
+    // oldEntity.getType(), oldEntityLevel);
+    // }
 
-            if (newEntity == null) {
-                LOGGER.error("Custom slime or magmacube is null, cannot replace default slime");
+    // if (newEntity == null) {
+    // LOGGER.error("Custom slime or magmacube is null, cannot replace default
+    // slime");
 
-                return;
-            }
+    // return;
+    // }
 
-            Utils.replaceEntity(event, newEntity,
-                    oldEntity,
-                    oldEntityLevel);
+    // Utils.replaceEntity(event, newEntity,
+    // oldEntity,
+    // oldEntityLevel);
 
-            newEntity.setYRot(oldEntity.getYRot() * (180F / (float) Math.PI));
-            newEntity.setPos(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ());
-            newEntity.setSize(new Random().nextInt(20) + 1, true);
+    // newEntity.setYRot(oldEntity.getYRot() * (180F / (float) Math.PI));
+    // newEntity.setPos(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ());
+    // newEntity.setSize(new Random().nextInt(20) + 1, true);
 
-            return;
-        }
-    }
+    // return;
+    // }
+    // }
 
     // You can use EventBusSubscriber to automatically register all static methods
     // in the class annotated with @SubscribeEvent
