@@ -27,7 +27,7 @@ public class CustomSmallFireball extends SmallFireball {
             Entity entity1 = this.getOwner();
             int i = entity.getRemainingFireTicks();
             entity.setSecondsOnFire(5);
-            if (!entity.hurt(this.damageSources().fireball(this, entity1), 8.0F)) {
+            if (!entity.hurt(this.damageSources().fireball(this, entity1), 11.0F)) {
                 entity.setRemainingFireTicks(i);
             } else if (entity1 instanceof LivingEntity) {
                 this.doEnchantDamageEffects((LivingEntity) entity1, entity);
