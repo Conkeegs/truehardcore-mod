@@ -18,6 +18,11 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -66,7 +71,7 @@ public class EntityRegistry {
      * List of all the types of zombies we want to modify.
      */
     private static final ArrayList<String> zombieDescriptionIds = new ArrayList<String>(
-            Arrays.asList("entity.minecraft.zombie", "entity.minecraft.zombie_villager"));
+            Arrays.asList("entity.minecraft.zombie", "entity.minecraft.zombie_villager", "entity.minecraft.drowned"));
     /**
      * List of all the types of spiders we want to modify.
      */
@@ -102,6 +107,9 @@ public class EntityRegistry {
             // null),
             // oldEntity,
             // oldEntityLevel);
+        });
+        this.addEntity("entity.minecraft.evoker", (EntityJoinLevelEvent event) -> {
+            Utils.modifySpeed((Evoker) event.getEntity(), 0.55F);
         });
         this.addEntity("entity.minecraft.small_fireball", (EntityJoinLevelEvent event) -> {
             SmallFireball oldEntity = (SmallFireball) event.getEntity();
@@ -215,6 +223,21 @@ public class EntityRegistry {
 
         this.addEntity("entity.minecraft.creeper", (EntityJoinLevelEvent event) -> {
             Utils.modifySpeed((Creeper) event.getEntity(), Utils.getRandomFromArrayList(creeperSpeeds));
+        });
+        this.addEntity("entity.minecraft.elder_guardian", (EntityJoinLevelEvent event) -> {
+            Utils.modifyAttackDamage((ElderGuardian) event.getEntity(), 12.0D);
+        });
+        this.addEntity("entity.minecraft.enderman", (EntityJoinLevelEvent event) -> {
+            Utils.modifyAttackDamage((EnderMan) event.getEntity(), 9.0D);
+        });
+        this.addEntity("entity.minecraft.endermite", (EntityJoinLevelEvent event) -> {
+            Utils.modifyAttackDamage((Endermite) event.getEntity(), 7.0D);
+        });
+        this.addEntity("entity.minecraft.guardian", (EntityJoinLevelEvent event) -> {
+            Guardian guardian = (Guardian) event.getEntity();
+
+            Utils.modifyAttackDamage(guardian, 10.0D);
+            Utils.modifySpeed(guardian, 0.55F);
         });
     }
 
