@@ -200,7 +200,7 @@ public class EntityRegistry {
 
             Utils.replaceEntity(event, new CustomLargeFireball(
                     oldEntityLevel,
-                    ghastTarget,
+                    ghast,
                     ghastTarget.getX(),
                     ghastTarget.getY(),
                     ghastTarget.getZ(),
