@@ -178,6 +178,8 @@ public class EntityRegistry {
                     oldEntityLevel);
         });
         this.addEntity("entity.minecraft.fireball", (EntityJoinLevelEvent event) -> {
+            LOGGER.info("Deinkle Shop");
+
             LargeFireball oldEntity = (LargeFireball) event.getEntity();
 
             // if a ghast didn't shoot the fireball, ignore it
@@ -212,9 +214,7 @@ public class EntityRegistry {
             customLargeFireball.setPos(ghast.getX() + vec3.x * 4.0D, ghast.getY(0.5D) + 0.5D,
                     customLargeFireball.getZ() + vec3.z * 4.0D);
 
-            Utils.replaceEntity(event, customLargeFireball,
-                    oldEntity,
-                    oldEntityLevel);
+            Utils.replaceEntity(event, customLargeFireball, oldEntity, oldEntityLevel);
         });
         this.addEntity("entity.minecraft.shulker_bullet", (EntityJoinLevelEvent event) -> {
             ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
