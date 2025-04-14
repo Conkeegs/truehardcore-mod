@@ -44,6 +44,7 @@ import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -175,7 +176,8 @@ public class EntityRegistry {
                     oldEntityLevel);
         });
         this.addEntity("entity.minecraft.fireball", (EntityJoinLevelEvent event) -> {
-            LOGGER.info("Deinkle Shop and ze owner is {}", event.getEntity().getType().getDescriptionId());
+            LOGGER.info("Deinkle Shop and ze owner is {}",
+                    ((Fireball) event.getEntity()).getOwner().getType().getDescriptionId());
 
             // LargeFireball oldEntity = (LargeFireball) event.getEntity();
 
