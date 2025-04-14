@@ -139,8 +139,9 @@ public class EntityRegistry {
             Utils.modifySpeed((Evoker) event.getEntity(), 0.55F);
         });
         this.addEntity("entity.minecraft.small_fireball", (EntityJoinLevelEvent event) -> {
+            LOGGER.info("FART FART FART");
+
             SmallFireball oldEntity = (SmallFireball) event.getEntity();
-            Level oldEntityLevel = oldEntity.level();
 
             // if a blaze didn't shoot the fireball, ignore it
             if (!((oldEntity.getOwner()) instanceof Blaze blaze)) {
@@ -165,6 +166,7 @@ public class EntityRegistry {
             double velocityX = deltaX / distance;
             double velocityY = deltaY / distance;
             double velocityZ = deltaZ / distance;
+            Level oldEntityLevel = oldEntity.level();
 
             Utils.replaceEntity(event, new CustomSmallFireball(
                     oldEntityLevel,
@@ -179,7 +181,6 @@ public class EntityRegistry {
         });
         this.addEntity("entity.minecraft.fireball", (EntityJoinLevelEvent event) -> {
             LargeFireball oldEntity = (LargeFireball) event.getEntity();
-            Level oldEntityLevel = oldEntity.level();
 
             // if a ghast didn't shoot the fireball, ignore it
             if (!((oldEntity.getOwner()) instanceof Ghast ghast)) {
@@ -197,6 +198,7 @@ public class EntityRegistry {
             }
 
             int defaultExplosionPower = 1;
+            Level oldEntityLevel = oldEntity.level();
 
             Utils.replaceEntity(event, new CustomLargeFireball(
                     oldEntityLevel,
