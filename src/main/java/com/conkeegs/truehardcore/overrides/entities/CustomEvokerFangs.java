@@ -10,9 +10,9 @@ public class CustomEvokerFangs extends EvokerFangs {
       super(p_36923_, p_36924_);
    }
 
-   public CustomEvokerFangs(Level p_36926_, double p_36927_, double p_36928_, double p_36929_, float p_36930_,
+   public CustomEvokerFangs(Level fangLevel, double fangX, double fangY, double fangZ, float p_36930_,
          int p_36931_, LivingEntity p_36932_) {
-      super(p_36926_, p_36927_, p_36928_, p_36929_, p_36930_, p_36931_, p_36932_);
+      super(fangLevel, fangX, fangY, fangZ, p_36930_, p_36931_, p_36932_);
    }
 
    private void dealDamageTo(LivingEntity p_36945_) {

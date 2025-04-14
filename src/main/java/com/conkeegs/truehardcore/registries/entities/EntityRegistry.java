@@ -45,6 +45,7 @@ import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -119,8 +120,29 @@ public class EntityRegistry {
             ((ThrownTrident) event.getEntity()).setBaseDamage(11.0D);
         });
         this.addEntity("entity.minecraft.evoker_fangs", (EntityJoinLevelEvent event) -> {
-            Entity oldEntity = event.getEntity();
+            EvokerFangs oldEntity = (EvokerFangs) event.getEntity();
             Level oldEntityLevel = oldEntity.level();
+            Field field = null;
+
+            try {
+                field = EvokerFangs.class.getDeclaredField("warmupDelayTicks");
+            } catch (NoSuchFieldException | SecurityException e) {
+                LOGGER.error("Error getting declared field warmupDelayTicks for evoker fangs: {}", e.getMessage());
+
+                return;
+            }
+
+            field.setAccessible(true);
+
+            int warmupDelayTicks = -1;
+
+            try {
+                warmupDelayTicks = (int) field.get(oldEntity);
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                LOGGER.error("Error getting warmupDelayTicks field for evoker fangs: {}", e.getMessage());
+
+                return;
+            }
 
             Utils.replaceEntity(event, new CustomEvokerFangs(
                     oldEntityLevel,
@@ -128,8 +150,8 @@ public class EntityRegistry {
                     oldEntity.getY(),
                     oldEntity.getZ(),
                     oldEntity.getYRot(),
-                    0,
-                    null),
+                    warmupDelayTicks,
+                    oldEntity.getOwner()),
                     oldEntity,
                     oldEntityLevel);
         });
