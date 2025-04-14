@@ -1,31 +1,45 @@
 package com.conkeegs.truehardcore.overrides.entities;
 
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.level.Level;
 
+/**
+ * Custom evoker fangs to increase damage.
+ */
 public class CustomEvokerFangs extends EvokerFangs {
-   public CustomEvokerFangs(EntityType<? extends EvokerFangs> p_36923_, Level p_36924_) {
-      super(p_36923_, p_36924_);
+   /**
+    * Custom evoker fangs constructor.
+    *
+    * @param fangLevel        the level the fangs are in
+    * @param fangX            fang x position
+    * @param fangY            fang y position
+    * @param fangZ            fang z position
+    * @param fangYRot         fang y rotation
+    * @param warmupDelayTicks fang warmupDelayTicks field
+    * @param owner            fang owner (evoker)
+    */
+   public CustomEvokerFangs(Level fangLevel, double fangX, double fangY, double fangZ, float fangYRot,
+         int warmupDelayTicks, LivingEntity owner) {
+      super(fangLevel, fangX, fangY, fangZ, fangYRot, warmupDelayTicks, owner);
    }
 
-   public CustomEvokerFangs(Level fangLevel, double fangX, double fangY, double fangZ, float p_36930_,
-         int p_36931_, LivingEntity p_36932_) {
-      super(fangLevel, fangX, fangY, fangZ, p_36930_, p_36931_, p_36932_);
-   }
-
-   private void dealDamageTo(LivingEntity p_36945_) {
+   /**
+    * Handle dealing damage to entities from fangs.
+    *
+    * @param target entity to hurt
+    */
+   private void dealDamageTo(LivingEntity target) {
       LivingEntity livingentity = this.getOwner();
-      if (p_36945_.isAlive() && !p_36945_.isInvulnerable() && p_36945_ != livingentity) {
+      if (target.isAlive() && !target.isInvulnerable() && target != livingentity) {
          if (livingentity == null) {
-            p_36945_.hurt(this.damageSources().magic(), 8.0F);
+            target.hurt(this.damageSources().magic(), 8.0F);
          } else {
-            if (livingentity.isAlliedTo(p_36945_)) {
+            if (livingentity.isAlliedTo(target)) {
                return;
             }
 
-            p_36945_.hurt(this.damageSources().indirectMagic(this, livingentity), 8.0F);
+            target.hurt(this.damageSources().indirectMagic(this, livingentity), 8.0F);
          }
 
       }

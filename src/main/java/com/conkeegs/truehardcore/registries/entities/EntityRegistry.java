@@ -125,7 +125,7 @@ public class EntityRegistry {
             Field field = null;
 
             try {
-                field = EvokerFangs.class.getDeclaredField("warmupDelayTicks");
+                field = EvokerFangs.class.getDeclaredField("p_36931_");
             } catch (NoSuchFieldException | SecurityException e) {
                 LOGGER.error("Error getting declared field warmupDelayTicks for evoker fangs: {}", e.getMessage());
 
