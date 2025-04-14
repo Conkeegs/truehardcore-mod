@@ -35,7 +35,6 @@ import net.minecraft.world.level.EntityBasedExplosionDamageCalculator;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -267,13 +266,6 @@ public class CustomExplosion extends Explosion {
 
         for (Pair<ItemStack, BlockPos> pair : objectarraylist) {
             Block.popResource(this.level, pair.getSecond(), pair.getFirst());
-        }
-
-        for (BlockPos blockpos2 : this.toBlow) {
-            if (this.random.nextInt(3) == 0 && this.level.getBlockState(blockpos2).isAir()
-                    && this.level.getBlockState(blockpos2.below()).isSolidRender(this.level, blockpos2.below())) {
-                this.level.setBlockAndUpdate(blockpos2, BaseFireBlock.getState(this.level, blockpos2));
-            }
         }
     }
 

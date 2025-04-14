@@ -44,7 +44,6 @@ import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -174,47 +173,6 @@ public class EntityRegistry {
                     velocityZ),
                     oldEntity,
                     oldEntityLevel);
-        });
-        this.addEntity("entity.minecraft.fireball", (EntityJoinLevelEvent event) -> {
-            LOGGER.info("Deinkle Shop and ze owner is {}",
-                    ((Fireball) event.getEntity()).getOwner().getType().getDescriptionId());
-
-            // LargeFireball oldEntity = (LargeFireball) event.getEntity();
-
-            // // if a ghast didn't shoot the fireball, ignore it
-            // if (!((oldEntity.getOwner()) instanceof Ghast ghast)) {
-            // LOGGER.info("ghast did NOT shoot fireball");
-
-            // return;
-            // }
-
-            // LivingEntity ghastTarget = ghast.getTarget();
-
-            // if (ghastTarget == null) {
-            // LOGGER.error("Ghast target is null");
-
-            // return;
-            // }
-
-            // int defaultExplosionPower = 1;
-            // Level oldEntityLevel = oldEntity.level();
-            // Vec3 vec3 = ghast.getViewVector(1.0F);
-            // double velocityX = ghastTarget.getX() - (ghast.getX() + vec3.x * 4.0D);
-            // double velocityY = ghastTarget.getY(0.5D) - (0.5D + ghast.getY(0.5D));
-            // double velocityZ = ghastTarget.getZ() - (ghast.getZ() + vec3.z * 4.0D);
-            // CustomLargeFireball customLargeFireball = new CustomLargeFireball(
-            // oldEntityLevel,
-            // ghast,
-            // velocityX,
-            // velocityY,
-            // velocityZ,
-            // defaultExplosionPower);
-
-            // customLargeFireball.setPos(ghast.getX() + vec3.x * 4.0D, ghast.getY(0.5D) +
-            // 0.5D,
-            // customLargeFireball.getZ() + vec3.z * 4.0D);
-
-            // Utils.replaceEntity(event, customLargeFireball, oldEntity, oldEntityLevel);
         });
         this.addEntity("entity.minecraft.shulker_bullet", (EntityJoinLevelEvent event) -> {
             ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
