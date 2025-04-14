@@ -141,10 +141,9 @@ public class EntityRegistry {
         this.addEntity("entity.minecraft.small_fireball", (EntityJoinLevelEvent event) -> {
             SmallFireball oldEntity = (SmallFireball) event.getEntity();
             Level oldEntityLevel = oldEntity.level();
-            Blaze blaze = (Blaze) (oldEntity.getOwner());
 
             // if a blaze didn't shoot the fireball, ignore it
-            if (blaze == null) {
+            if (!((oldEntity.getOwner()) instanceof Blaze blaze)) {
                 return;
             }
 
@@ -181,10 +180,11 @@ public class EntityRegistry {
         this.addEntity("entity.minecraft.fireball", (EntityJoinLevelEvent event) -> {
             LargeFireball oldEntity = (LargeFireball) event.getEntity();
             Level oldEntityLevel = oldEntity.level();
-            Ghast ghast = (Ghast) (oldEntity.getOwner());
 
             // if a ghast didn't shoot the fireball, ignore it
-            if (ghast == null) {
+            if (!((oldEntity.getOwner()) instanceof Ghast ghast)) {
+                LOGGER.info("ghast did NOT shoot fireball");
+
                 return;
             }
 

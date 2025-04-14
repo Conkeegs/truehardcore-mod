@@ -37,8 +37,6 @@ public class CustomSmallFireball extends SmallFireball {
      */
     @Override
     protected void onHitEntity(EntityHitResult p_37386_) {
-        LOGGER.info("GARBUNGLE PRUNGLE MUNGLE");
-
         if (!this.level().isClientSide) {
             Entity entity = p_37386_.getEntity();
             Entity entity1 = this.getOwner();
