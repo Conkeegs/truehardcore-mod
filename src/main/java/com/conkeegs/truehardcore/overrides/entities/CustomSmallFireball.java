@@ -10,14 +10,31 @@ import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
+/**
+ * Custom small fireball that does more damage.
+ */
 public class CustomSmallFireball extends SmallFireball {
     private static final Logger LOGGER = TruestLogger.getLogger();
 
-    public CustomSmallFireball(Level p_37367_, double p_37368_, double p_37369_, double p_37370_, double p_37371_,
-            double p_37372_, double p_37373_) {
-        super(p_37367_, p_37368_, p_37369_, p_37370_, p_37371_, p_37372_, p_37373_);
+    /**
+     * Custom small fireball constructor.
+     *
+     * @param fireballLevel the level the fireball is in
+     * @param targetX       target's x position
+     * @param targetY       target's y position
+     * @param targetZ       target's z position
+     * @param directionX    target's x direction
+     * @param directionY    target's y direction
+     * @param directionZ    target's z direction
+     */
+    public CustomSmallFireball(Level fireballLevel, double targetX, double targetY, double targetZ, double directionX,
+            double directionY, double directionZ) {
+        super(fireballLevel, targetX, targetY, targetZ, directionX, directionY, directionZ);
     }
 
+    /**
+     * Determine what happens after fireball hits its target.
+     */
     @Override
     protected void onHitEntity(EntityHitResult p_37386_) {
         LOGGER.info("GARBUNGLE PRUNGLE MUNGLE");
