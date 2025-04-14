@@ -201,6 +201,16 @@ public class EntityRegistry {
             double velocityX = ghastTarget.getX() - (ghast.getX() + vec3.x * 4.0D);
             double velocityY = ghastTarget.getY(0.5D) - (0.5D + ghast.getY(0.5D));
             double velocityZ = ghastTarget.getZ() - (ghast.getZ() + vec3.z * 4.0D);
+            CustomLargeFireball customLargeFireball = new CustomLargeFireball(
+                    oldEntityLevel,
+                    ghast,
+                    velocityX,
+                    velocityY,
+                    velocityZ,
+                    defaultExplosionPower);
+
+            customLargeFireball.setPos(ghast.getX() + vec3.x * 4.0D, ghast.getY(0.5D) + 0.5D,
+                    customLargeFireball.getZ() + vec3.z * 4.0D);
 
             Utils.replaceEntity(event, new CustomLargeFireball(
                     oldEntityLevel,
