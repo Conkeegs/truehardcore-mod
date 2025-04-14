@@ -1,6 +1,5 @@
 package com.conkeegs.truehardcore.overrides.entities;
 
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.EvokerFangs;
@@ -20,13 +19,13 @@ public class CustomEvokerFangs extends EvokerFangs {
       LivingEntity livingentity = this.getOwner();
       if (p_36945_.isAlive() && !p_36945_.isInvulnerable() && p_36945_ != livingentity) {
          if (livingentity == null) {
-            p_36945_.hurt(this.damageSources().magic(), 7.0F);
+            p_36945_.hurt(this.damageSources().magic(), 8.0F);
          } else {
             if (livingentity.isAlliedTo(p_36945_)) {
                return;
             }
 
-            p_36945_.hurt(this.damageSources().indirectMagic(this, livingentity), 6.0F);
+            p_36945_.hurt(this.damageSources().indirectMagic(this, livingentity), 8.0F);
          }
 
       }

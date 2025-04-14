@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 
+import com.conkeegs.truehardcore.overrides.entities.CustomEvokerFangs;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
@@ -121,16 +122,16 @@ public class EntityRegistry {
             Entity oldEntity = event.getEntity();
             Level oldEntityLevel = oldEntity.level();
 
-            // Utils.replaceEntity(event, new CustomEvokerFangs(
-            // oldEntityLevel,
-            // oldEntity.getX(),
-            // oldEntity.getY(),
-            // oldEntity.getZ(),
-            // oldEntity.getYRot(),
-            // 0,
-            // null),
-            // oldEntity,
-            // oldEntityLevel);
+            Utils.replaceEntity(event, new CustomEvokerFangs(
+                    oldEntityLevel,
+                    oldEntity.getX(),
+                    oldEntity.getY(),
+                    oldEntity.getZ(),
+                    oldEntity.getYRot(),
+                    0,
+                    null),
+                    oldEntity,
+                    oldEntityLevel);
         });
         this.addEntity("entity.minecraft.evoker", (EntityJoinLevelEvent event) -> {
             Utils.modifySpeed((Evoker) event.getEntity(), 0.55F);
