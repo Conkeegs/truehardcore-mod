@@ -122,27 +122,6 @@ public class EntityRegistry {
         this.addEntity("entity.minecraft.evoker_fangs", (EntityJoinLevelEvent event) -> {
             EvokerFangs oldEntity = (EvokerFangs) event.getEntity();
             Level oldEntityLevel = oldEntity.level();
-            Field field = null;
-
-            try {
-                field = EvokerFangs.class.getDeclaredField("p_36931_");
-            } catch (NoSuchFieldException | SecurityException e) {
-                LOGGER.error("Error getting declared field warmupDelayTicks for evoker fangs: {}", e.getMessage());
-
-                return;
-            }
-
-            field.setAccessible(true);
-
-            int warmupDelayTicks = -1;
-
-            try {
-                warmupDelayTicks = (int) field.get(oldEntity);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                LOGGER.error("Error getting warmupDelayTicks field for evoker fangs: {}", e.getMessage());
-
-                return;
-            }
 
             Utils.replaceEntity(event, new CustomEvokerFangs(
                     oldEntityLevel,
@@ -150,7 +129,7 @@ public class EntityRegistry {
                     oldEntity.getY(),
                     oldEntity.getZ(),
                     oldEntity.getYRot(),
-                    warmupDelayTicks,
+                    0,
                     oldEntity.getOwner()),
                     oldEntity,
                     oldEntityLevel);
