@@ -1,6 +1,5 @@
 package com.conkeegs.truehardcore.registries.entities;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,12 +8,11 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 
-import com.conkeegs.truehardcore.overrides.entities.CustomEvokerFangs;
+import com.conkeegs.truehardcore.overrides.entities.CustomShulkerBullet;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Panda;
@@ -31,6 +29,7 @@ import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
@@ -45,7 +44,6 @@ import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -120,19 +118,19 @@ public class EntityRegistry {
             ((ThrownTrident) event.getEntity()).setBaseDamage(11.0D);
         });
         this.addEntity("entity.minecraft.evoker_fangs", (EntityJoinLevelEvent event) -> {
-            EvokerFangs oldEntity = (EvokerFangs) event.getEntity();
-            Level oldEntityLevel = oldEntity.level();
+            // EvokerFangs oldEntity = (EvokerFangs) event.getEntity();
+            // Level oldEntityLevel = oldEntity.level();
 
-            Utils.replaceEntity(event, new CustomEvokerFangs(
-                    oldEntityLevel,
-                    oldEntity.getX(),
-                    oldEntity.getY(),
-                    oldEntity.getZ(),
-                    0.0F,
-                    0,
-                    oldEntity.getOwner()),
-                    oldEntity,
-                    oldEntityLevel);
+            // Utils.replaceEntity(event, new CustomEvokerFangs(
+            // oldEntityLevel,
+            // oldEntity.getX(),
+            // oldEntity.getY(),
+            // oldEntity.getZ(),
+            // 0.0F,
+            // 0,
+            // oldEntity.getOwner()),
+            // oldEntity,
+            // oldEntityLevel);
         });
         this.addEntity("entity.minecraft.evoker", (EntityJoinLevelEvent event) -> {
             Utils.modifySpeed((Evoker) event.getEntity(), 0.55F);
@@ -178,25 +176,41 @@ public class EntityRegistry {
         });
         this.addEntity("entity.minecraft.shulker_bullet", (EntityJoinLevelEvent event) -> {
             ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
+            Shulker owner = (Shulker) oldEntity.getOwner();
+
+            if (owner == null) {
+                LOGGER.error("Shulker bullet owner is null");
+
+                return;
+            }
+
             Level oldEntityLevel = oldEntity.level();
 
-            try {
-                Field field = ShulkerBullet.class.getDeclaredField("f_37312_");
+            Utils.replaceEntity(event, new CustomShulkerBullet(
+                    oldEntityLevel,
+                    owner,
+                    owner.getTarget(),
+                    oldEntity.getMotionDirection().getAxis()),
+                    oldEntity,
+                    oldEntityLevel);
 
-                field.setAccessible(true);
+            // try {
+            // Field field = ShulkerBullet.class.getDeclaredField("f_37312_");
 
-                Entity target = (Entity) field.get(oldEntity);
+            // field.setAccessible(true);
 
-                // Utils.replaceEntity(event, new CustomShulkerBullet(
-                // oldEntityLevel,
-                // (Shulker) oldEntity.getOwner(),
-                // target,
-                // oldEntity.getMotionDirection().getAxis()),
-                // oldEntity,
-                // oldEntityLevel);
-            } catch (Exception e) {
-                LOGGER.error("Error replacing Shulker bullet - {}", e);
-            }
+            // Entity target = (Entity) field.get(oldEntity);
+
+            // Utils.replaceEntity(event, new CustomShulk(
+            // oldEntityLevel,
+            // (Shulker) oldEntity.getOwner(),
+            // target,
+            // oldEntity.getMotionDirection().getAxis()),
+            // oldEntity,
+            // oldEntityLevel);
+            // } catch (Exception e) {
+            // LOGGER.error("Error replacing Shulker bullet - {}", e);
+            // }
         });
         this.addEntity("entity.minecraft.iron_golem", (EntityJoinLevelEvent event) -> {
             IronGolem oldEntity = (IronGolem) event.getEntity();
