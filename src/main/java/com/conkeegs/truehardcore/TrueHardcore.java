@@ -18,7 +18,6 @@ import com.conkeegs.truehardcore.overrides.objects.CustomExplosion;
 import com.conkeegs.truehardcore.registries.entities.EntityRegistry;
 import com.conkeegs.truehardcore.registries.explosions.ExplosionRegistry;
 import com.conkeegs.truehardcore.utils.TruestLogger;
-import com.conkeegs.truehardcore.utils.Utils;
 
 import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
@@ -77,8 +76,6 @@ public class TrueHardcore {
     public static void handleServerStarted(ServerStartedEvent event) {
         // sleeping not allowed, so we don't want phantoms spawning
         event.getServer().overworld().getGameRules().getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
-
-        Utils.printAllEntities();
     }
 
     /**
