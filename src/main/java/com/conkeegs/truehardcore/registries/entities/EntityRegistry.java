@@ -128,7 +128,7 @@ public class EntityRegistry {
                     oldEntity.getX(),
                     oldEntity.getY(),
                     oldEntity.getZ(),
-                    oldEntity.getYRot(),
+                    oldEntity.getYHeadRot(),
                     0,
                     oldEntity.getOwner()),
                     oldEntity,
