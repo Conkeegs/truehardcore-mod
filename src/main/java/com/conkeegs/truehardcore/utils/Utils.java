@@ -102,6 +102,24 @@ public final class Utils {
     }
 
     /**
+     * Attempts to modify the speed attribute of a living entity.
+     *
+     * @param entity the living entity to modify
+     * @param speed  the speed to set
+     */
+    public static final void modifySpeed(LivingEntity entity, double speed) {
+        AttributeInstance speedAttribute = entity.getAttribute(Attributes.MOVEMENT_SPEED);
+
+        if (speedAttribute == null) {
+            LOGGER.error("Could not modify speed attribute for entity: '{}'", entity.getType().getDescriptionId());
+
+            return;
+        }
+
+        speedAttribute.setBaseValue(speed);
+    }
+
+    /**
      * Get a random value from an {@code ArrayList}. Mostly useful for getting
      * random mob speeds or damages.
      *
