@@ -31,7 +31,8 @@ public final class Utils {
     public static final void replaceEntity(EntityJoinLevelEvent event, Entity newEntity, Entity oldEntity,
             Level oldEntityLevel) {
         event.setCanceled(true);
-
+        newEntity.moveTo(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ(), oldEntity.getYRot(),
+                oldEntity.getXRot());
         // 7.0?
         oldEntityLevel.addFreshEntity(newEntity);
         oldEntity.discard();
@@ -48,7 +49,8 @@ public final class Utils {
     public static final void replaceEntity(MobSpawnEvent event, Entity newEntity, Entity oldEntity,
             Level oldEntityLevel) {
         event.setCanceled(true);
-
+        newEntity.moveTo(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ(), oldEntity.getYRot(),
+                oldEntity.getXRot());
         // 7.0?
         oldEntityLevel.addFreshEntity(newEntity);
         oldEntity.discard();
