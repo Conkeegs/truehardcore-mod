@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 
 import com.conkeegs.truehardcore.overrides.entities.CustomEnderDragon;
-import com.conkeegs.truehardcore.overrides.entities.CustomShulkerBullet;
+import com.conkeegs.truehardcore.overrides.entities.CustomIronGolem;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
@@ -32,7 +32,6 @@ import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Ravager;
-import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
@@ -47,7 +46,6 @@ import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.level.Level;
@@ -178,24 +176,24 @@ public class EntityRegistry {
                     oldEntityLevel);
         });
         this.addEntity("entity.minecraft.shulker_bullet", (EntityJoinLevelEvent event) -> {
-            ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
-            Shulker owner = (Shulker) oldEntity.getOwner();
+            // ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
+            // Shulker owner = (Shulker) oldEntity.getOwner();
 
-            if (owner == null) {
-                LOGGER.error("Shulker bullet owner is null");
+            // if (owner == null) {
+            // LOGGER.error("Shulker bullet owner is null");
 
-                return;
-            }
+            // return;
+            // }
 
-            Level oldEntityLevel = oldEntity.level();
+            // Level oldEntityLevel = oldEntity.level();
 
-            Utils.replaceEntity(event, new CustomShulkerBullet(
-                    owner.level(),
-                    owner,
-                    owner.getTarget(),
-                    owner.getAttachFace().getAxis()),
-                    oldEntity,
-                    oldEntityLevel);
+            // Utils.replaceEntity(event, new CustomShulkerBullet(
+            // owner.level(),
+            // owner,
+            // owner.getTarget(),
+            // owner.getAttachFace().getAxis()),
+            // oldEntity,
+            // oldEntityLevel);
 
             // try {
             // Field field = ShulkerBullet.class.getDeclaredField("f_37312_");
@@ -219,15 +217,10 @@ public class EntityRegistry {
             IronGolem oldEntity = (IronGolem) event.getEntity();
             Level oldEntityLevel = oldEntity.level();
 
-            // Utils.replaceEntity(event, new CustomIronGolem(
-            // (EntityType<? extends IronGolem>) oldEntity.getType(),
-            // oldEntityLevel,
-            // oldEntity.getX(),
-            // oldEntity.getY(),
-            // oldEntity.getZ(),
-            // oldEntity.getYRot()),
-            // oldEntity,
-            // oldEntityLevel);
+            Utils.modifyAttackDamage(oldEntity, 18.0D);
+
+            Utils.replaceEntity(event, new CustomIronGolem(EntityType.IRON_GOLEM, oldEntityLevel), oldEntity,
+                    oldEntityLevel);
         });
 
         for (String zombieDescriptionId : zombieDescriptionIds) {
