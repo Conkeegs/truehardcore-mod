@@ -16,6 +16,7 @@ import com.starfish_studios.naturalist.common.entity.Alligator;
 import com.starfish_studios.naturalist.common.entity.Bear;
 import com.starfish_studios.naturalist.common.entity.Boar;
 import com.starfish_studios.naturalist.common.entity.Elephant;
+import com.starfish_studios.naturalist.common.entity.Hippo;
 import com.starfish_studios.naturalist.common.entity.Snake;
 
 import net.minecraft.world.entity.EntityType;
@@ -426,6 +427,18 @@ public class EntityRegistry {
 
             Utils.modifySpeed(elephant, 0.3);
         });
+        this.addEntity("entity.naturalist.hippo", (EntityJoinLevelEvent event) -> {
+            Hippo hippo = (Hippo) event.getEntity();
+
+            Utils.modifyAttackDamage(hippo, 9.0D);
+            Utils.modifySpeed(hippo, 0.3);
+        });
+        // this.addEntity("entity.naturalist.lion", (EntityJoinLevelEvent event) -> {
+        // Lion lion = (Lion) event.getEntity();
+
+        // Utils.modifyAttackDamage(lion, 9.0D);
+        // Utils.modifySpeed(lion, 0.3);
+        // });
     }
 
     /**
