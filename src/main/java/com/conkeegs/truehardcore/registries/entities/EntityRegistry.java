@@ -190,7 +190,7 @@ public class EntityRegistry {
                     oldEntityLevel,
                     owner,
                     owner.getTarget(),
-                    oldEntity.getMotionDirection().getAxis()),
+                    owner.getAttachFace().getAxis()),
                     oldEntity,
                     oldEntityLevel);
 
