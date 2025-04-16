@@ -152,6 +152,10 @@ dependencies {
     // Optionally, to run it in dev:
     runtimeOnly fg.deobf("geckolib-forge:geckolib-forge:1.20.1-4.7.1.2")
 
+    compileOnly fg.deobf("naturalist-5.0pre2+forge:naturalist-5.0pre2+forge:1.20.1")
+    // Optionally, to run it in dev:
+    runtimeOnly fg.deobf("naturalist-5.0pre2+forge:naturalist-5.0pre2+forge:1.20.1")
+
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html

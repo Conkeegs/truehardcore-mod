@@ -12,6 +12,8 @@ import com.conkeegs.truehardcore.overrides.entities.CustomEnderDragon;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
+import com.starfish_studios.naturalist.common.entity.Alligator;
+import com.starfish_studios.naturalist.common.entity.Bear;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,6 +30,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.Silverfish;
@@ -338,9 +341,9 @@ public class EntityRegistry {
             Utils.modifySpeed(slime, 0.6F);
         });
         this.addEntity("entity.minecraft.magma_cube", (EntityJoinLevelEvent event) -> {
-            Slime slime = (Slime) event.getEntity();
+            MagmaCube slime = (MagmaCube) event.getEntity();
 
-            Utils.modifyAttackDamage(slime, 12.0D);
+            Utils.modifyAttackDamage(slime, 10.0D);
             Utils.modifySpeed(slime, 0.7F);
         });
 
@@ -390,6 +393,18 @@ public class EntityRegistry {
                     new CustomEnderDragon((EntityType<? extends EnderDragon>) oldEntity.getType(), oldEntityLevel),
                     oldEntity,
                     oldEntityLevel);
+        });
+        this.addEntity("entity.naturalist.alligator", (EntityJoinLevelEvent event) -> {
+            Alligator alligator = (Alligator) event.getEntity();
+
+            Utils.modifyAttackDamage(alligator, 9.0D);
+            Utils.modifySpeed(alligator, 0.3);
+        });
+        this.addEntity("entity.naturalist.bear", (EntityJoinLevelEvent event) -> {
+            Bear bear = (Bear) event.getEntity();
+
+            Utils.modifyAttackDamage(bear, 9.0D);
+            Utils.modifySpeed(bear, 0.35);
         });
     }
 
