@@ -14,6 +14,9 @@ import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 import com.starfish_studios.naturalist.common.entity.Alligator;
 import com.starfish_studios.naturalist.common.entity.Bear;
+import com.starfish_studios.naturalist.common.entity.Boar;
+import com.starfish_studios.naturalist.common.entity.Elephant;
+import com.starfish_studios.naturalist.common.entity.Snake;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -398,13 +401,30 @@ public class EntityRegistry {
             Alligator alligator = (Alligator) event.getEntity();
 
             Utils.modifyAttackDamage(alligator, 9.0D);
-            Utils.modifySpeed(alligator, 0.3);
+            Utils.modifySpeed(alligator, 0.4);
         });
         this.addEntity("entity.naturalist.bear", (EntityJoinLevelEvent event) -> {
             Bear bear = (Bear) event.getEntity();
 
             Utils.modifyAttackDamage(bear, 9.0D);
-            Utils.modifySpeed(bear, 0.35);
+            Utils.modifySpeed(bear, 0.3);
+        });
+        this.addEntity("entity.naturalist.boar", (EntityJoinLevelEvent event) -> {
+            Boar boar = (Boar) event.getEntity();
+
+            Utils.modifyAttackDamage(boar, 7.0D);
+            Utils.modifySpeed(boar, 0.3);
+        });
+        this.addEntity("entity.naturalist.coral_snake", (EntityJoinLevelEvent event) -> {
+            Snake snake = (Snake) event.getEntity();
+
+            Utils.modifyAttackDamage(snake, 7.5D);
+            Utils.modifySpeed(snake, 0.25);
+        });
+        this.addEntity("entity.naturalist.elephant", (EntityJoinLevelEvent event) -> {
+            Elephant elephant = (Elephant) event.getEntity();
+
+            Utils.modifySpeed(elephant, 0.3);
         });
     }
 
