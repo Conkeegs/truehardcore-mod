@@ -8,16 +8,19 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 
+import com.conkeegs.truehardcore.overrides.entities.CustomEnderDragon;
 import com.conkeegs.truehardcore.overrides.entities.CustomShulkerBullet;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
@@ -187,7 +190,7 @@ public class EntityRegistry {
             Level oldEntityLevel = oldEntity.level();
 
             Utils.replaceEntity(event, new CustomShulkerBullet(
-                    oldEntityLevel,
+                    owner.level(),
                     owner,
                     owner.getTarget(),
                     owner.getAttachFace().getAxis()),
@@ -379,6 +382,15 @@ public class EntityRegistry {
 
             Utils.modifyAttackDamage(zoglin, 11.0D);
             Utils.modifySpeed(zoglin, 0.35F);
+        });
+        this.addEntity("entity.minecraft.ender_dragon", (EntityJoinLevelEvent event) -> {
+            EnderDragon oldEntity = (EnderDragon) event.getEntity();
+            Level oldEntityLevel = oldEntity.level();
+
+            Utils.replaceEntity(event,
+                    new CustomEnderDragon((EntityType<? extends EnderDragon>) oldEntity.getType(), oldEntityLevel),
+                    oldEntity,
+                    oldEntityLevel);
         });
     }
 
