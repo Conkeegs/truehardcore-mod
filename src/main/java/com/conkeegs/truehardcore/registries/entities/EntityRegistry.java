@@ -17,6 +17,8 @@ import com.starfish_studios.naturalist.common.entity.Bear;
 import com.starfish_studios.naturalist.common.entity.Boar;
 import com.starfish_studios.naturalist.common.entity.Elephant;
 import com.starfish_studios.naturalist.common.entity.Hippo;
+import com.starfish_studios.naturalist.common.entity.Lion;
+import com.starfish_studios.naturalist.common.entity.Rhino;
 import com.starfish_studios.naturalist.common.entity.Snake;
 
 import net.minecraft.world.entity.EntityType;
@@ -56,6 +58,7 @@ import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import tallestegg.guardvillagers.entities.Guard;
 
 /**
  * Registry of entities that will have their properties modified upon spawning.
@@ -402,19 +405,19 @@ public class EntityRegistry {
             Alligator alligator = (Alligator) event.getEntity();
 
             Utils.modifyAttackDamage(alligator, 9.0D);
-            Utils.modifySpeed(alligator, 0.4);
+            Utils.modifySpeed(alligator, 0.35);
         });
         this.addEntity("entity.naturalist.bear", (EntityJoinLevelEvent event) -> {
             Bear bear = (Bear) event.getEntity();
 
             Utils.modifyAttackDamage(bear, 9.0D);
-            Utils.modifySpeed(bear, 0.3);
+            Utils.modifySpeed(bear, 0.28);
         });
         this.addEntity("entity.naturalist.boar", (EntityJoinLevelEvent event) -> {
             Boar boar = (Boar) event.getEntity();
 
             Utils.modifyAttackDamage(boar, 7.0D);
-            Utils.modifySpeed(boar, 0.3);
+            Utils.modifySpeed(boar, 0.28);
         });
         this.addEntity("entity.naturalist.coral_snake", (EntityJoinLevelEvent event) -> {
             Snake snake = (Snake) event.getEntity();
@@ -422,23 +425,46 @@ public class EntityRegistry {
             Utils.modifyAttackDamage(snake, 7.5D);
             Utils.modifySpeed(snake, 0.25);
         });
+        this.addEntity("entity.naturalist.rattlesnake", (EntityJoinLevelEvent event) -> {
+            Snake snake = (Snake) event.getEntity();
+
+            Utils.modifyAttackDamage(snake, 7.5D);
+            Utils.modifySpeed(snake, 0.25);
+        });
+        this.addEntity("entity.naturalist.rattlesnake", (EntityJoinLevelEvent event) -> {
+            Snake snake = (Snake) event.getEntity();
+
+            Utils.modifyAttackDamage(snake, 6.5D);
+            Utils.modifySpeed(snake, 0.23);
+        });
         this.addEntity("entity.naturalist.elephant", (EntityJoinLevelEvent event) -> {
             Elephant elephant = (Elephant) event.getEntity();
 
-            Utils.modifySpeed(elephant, 0.3);
+            Utils.modifySpeed(elephant, 0.28);
         });
         this.addEntity("entity.naturalist.hippo", (EntityJoinLevelEvent event) -> {
             Hippo hippo = (Hippo) event.getEntity();
 
             Utils.modifyAttackDamage(hippo, 9.0D);
-            Utils.modifySpeed(hippo, 0.3);
+            Utils.modifySpeed(hippo, 0.25);
         });
-        // this.addEntity("entity.naturalist.lion", (EntityJoinLevelEvent event) -> {
-        // Lion lion = (Lion) event.getEntity();
+        this.addEntity("entity.naturalist.lion", (EntityJoinLevelEvent event) -> {
+            Lion lion = (Lion) event.getEntity();
 
-        // Utils.modifyAttackDamage(lion, 9.0D);
-        // Utils.modifySpeed(lion, 0.3);
-        // });
+            Utils.modifyAttackDamage(lion, 7.0D);
+            Utils.modifySpeed(lion, 0.3);
+        });
+        this.addEntity("entity.naturalist.rhino", (EntityJoinLevelEvent event) -> {
+            Rhino rhino = (Rhino) event.getEntity();
+
+            Utils.modifyAttackDamage(rhino, 9.0D);
+            Utils.modifySpeed(rhino, 0.25);
+        });
+        this.addEntity("entity.guardvillagers.guard", (EntityJoinLevelEvent event) -> {
+            Guard guardVillager = (Guard) event.getEntity();
+
+            Utils.modifyAttackDamage(guardVillager, 5.0D);
+        });
     }
 
     /**
