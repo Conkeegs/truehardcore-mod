@@ -9,14 +9,12 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 
 import com.conkeegs.truehardcore.overrides.entities.CustomEnderDragon;
-import com.conkeegs.truehardcore.overrides.entities.CustomIronGolem;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.animal.Wolf;
@@ -214,15 +212,15 @@ public class EntityRegistry {
             // }
         });
         this.addEntity("entity.minecraft.iron_golem", (EntityJoinLevelEvent event) -> {
-            IronGolem oldEntity = (IronGolem) event.getEntity();
-            Level oldEntityLevel = oldEntity.level();
+            // IronGolem oldEntity = (IronGolem) event.getEntity();
+            // Level oldEntityLevel = oldEntity.level();
 
-            Utils.modifyAttackDamage(oldEntity, 18.0D);
-            Utils.modifySpeed(oldEntity, 0.25D);
-            Utils.replaceEntity(event,
-                    new CustomIronGolem(EntityType.IRON_GOLEM, oldEntityLevel),
-                    oldEntity,
-                    oldEntityLevel);
+            // Utils.modifyAttackDamage(oldEntity, 18.0D);
+            // Utils.modifySpeed(oldEntity, 0.25D);
+            // Utils.replaceEntity(event,
+            // new CustomIronGolem(EntityType.IRON_GOLEM, oldEntityLevel),
+            // oldEntity,
+            // oldEntityLevel);
         });
 
         for (String zombieDescriptionId : zombieDescriptionIds) {
@@ -338,6 +336,12 @@ public class EntityRegistry {
 
             Utils.modifyAttackDamage(slime, 8.0D);
             Utils.modifySpeed(slime, 0.6F);
+        });
+        this.addEntity("entity.minecraft.magma_cube", (EntityJoinLevelEvent event) -> {
+            Slime slime = (Slime) event.getEntity();
+
+            Utils.modifyAttackDamage(slime, 12.0D);
+            Utils.modifySpeed(slime, 0.7F);
         });
 
         for (String skeletonDescriptionId : skeletonDescriptionIds) {
