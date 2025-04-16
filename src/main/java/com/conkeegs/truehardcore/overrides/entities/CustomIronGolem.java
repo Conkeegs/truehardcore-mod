@@ -11,12 +11,8 @@ import net.minecraft.world.level.Level;
 public class CustomIronGolem extends IronGolem {
     private int attackAnimationTick;
 
-    public CustomIronGolem(EntityType<? extends IronGolem> p_28834_, Level p_28835_, double p_36927_, double p_36928_,
-            double p_36929_, float p_36930_) {
+    public CustomIronGolem(EntityType<? extends IronGolem> p_28834_, Level p_28835_) {
         super(p_28834_, p_28835_);
-
-        this.setPos(p_36927_, p_36928_, p_36929_);
-        this.setYRot(p_36930_);
     }
 
     private float getAttackDamage() {

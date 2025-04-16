@@ -220,8 +220,7 @@ public class EntityRegistry {
             Utils.modifyAttackDamage(oldEntity, 18.0D);
             Utils.modifySpeed(oldEntity, 0.25D);
             Utils.replaceEntity(event,
-                    new CustomIronGolem(EntityType.IRON_GOLEM, oldEntityLevel, oldEntity.getX(), oldEntity.getY(),
-                            oldEntity.getZ(), oldEntity.getYRot()),
+                    new CustomIronGolem(EntityType.IRON_GOLEM, oldEntityLevel),
                     oldEntity,
                     oldEntityLevel);
         });
