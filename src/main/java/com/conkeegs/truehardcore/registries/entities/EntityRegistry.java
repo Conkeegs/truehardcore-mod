@@ -59,10 +59,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import tallestegg.guardvillagers.entities.Guard;
+import twilightforest.entity.boss.Lich;
 import twilightforest.entity.monster.BlockChainGoblin;
 import twilightforest.entity.monster.CarminiteGolem;
 import twilightforest.entity.monster.DeathTome;
 import twilightforest.entity.monster.FireBeetle;
+import twilightforest.entity.monster.HostileWolf;
+import twilightforest.entity.monster.Kobold;
+import twilightforest.entity.monster.LowerGoblinKnight;
 
 /**
  * Registry of entities that will have their properties modified upon spawning.
@@ -115,6 +119,11 @@ public class EntityRegistry {
      */
     private static final ArrayList<String> skeletonDescriptionIds = new ArrayList<String>(
             Arrays.asList("entity.minecraft.skeleton", "entity.minecraft.wither_skeleton", "entity.minecraft.stray"));
+    /**
+     * List of all the types of slimes we want to modify.
+     */
+    private static final ArrayList<String> slimeDescriptionIds = new ArrayList<String>(
+            Arrays.asList("entity.minecraft.slime", "entity.twilightforest.maze_slime"));
 
     /**
      * Private {@code EntityRegistry} singleton constructor.
@@ -346,12 +355,6 @@ public class EntityRegistry {
             Utils.modifyAttackDamage(silverfish, 4.0D);
             Utils.modifySpeed(silverfish, 0.3F);
         });
-        this.addEntity("entity.minecraft.slime", (EntityJoinLevelEvent event) -> {
-            Slime slime = (Slime) event.getEntity();
-
-            Utils.modifyAttackDamage(slime, 8.0D);
-            Utils.modifySpeed(slime, 0.6F);
-        });
         this.addEntity("entity.minecraft.magma_cube", (EntityJoinLevelEvent event) -> {
             MagmaCube slime = (MagmaCube) event.getEntity();
 
@@ -456,8 +459,8 @@ public class EntityRegistry {
         this.addEntity("entity.naturalist.lion", (EntityJoinLevelEvent event) -> {
             Lion lion = (Lion) event.getEntity();
 
-            Utils.modifyAttackDamage(lion, 7.0D);
-            // Utils.modifySpeed(lion, 0.3);
+            Utils.modifyAttackDamage(lion, 8.0D);
+            Utils.modifySpeed(lion, 0.23);
         });
         this.addEntity("entity.naturalist.rhino", (EntityJoinLevelEvent event) -> {
             Rhino rhino = (Rhino) event.getEntity();
@@ -474,31 +477,72 @@ public class EntityRegistry {
             BlockChainGoblin blockChainGoblin = (BlockChainGoblin) event.getEntity();
 
             Utils.modifyAttackDamage(blockChainGoblin, 10.0D);
-            Utils.modifySpeed(blockChainGoblin, 0.3);
-        });
-        this.addEntity("entity.twilightforest.boar", (EntityJoinLevelEvent event) -> {
-            Boar boar = (Boar) event.getEntity();
-
-            Utils.modifyAttackDamage(boar, 10.0D);
+            Utils.modifySpeed(blockChainGoblin, 0.35);
         });
         this.addEntity("entity.twilightforest.carminite_golem", (EntityJoinLevelEvent event) -> {
             CarminiteGolem carminiteGolem = (CarminiteGolem) event.getEntity();
 
             Utils.modifyAttackDamage(carminiteGolem, 10.0D);
-            Utils.modifySpeed(carminiteGolem, 0.27);
+            Utils.modifySpeed(carminiteGolem, 0.34);
         });
         this.addEntity("entity.twilightforest.death_tome", (EntityJoinLevelEvent event) -> {
             DeathTome deathTome = (DeathTome) event.getEntity();
 
             Utils.modifyAttackDamage(deathTome, 9.0D);
-            Utils.modifySpeed(deathTome, 0.28);
+            Utils.modifySpeed(deathTome, 0.32);
         });
         this.addEntity("entity.twilightforest.fire_beetle", (EntityJoinLevelEvent event) -> {
             FireBeetle fireBeetle = (FireBeetle) event.getEntity();
 
             Utils.modifyAttackDamage(fireBeetle, 8.0D);
-            Utils.modifySpeed(fireBeetle, 0.28);
+            Utils.modifySpeed(fireBeetle, 0.33);
         });
+        this.addEntity("entity.twilightforest.hostile_wolf", (EntityJoinLevelEvent event) -> {
+            HostileWolf hostileWolf = (HostileWolf) event.getEntity();
+
+            Utils.modifyAttackDamage(hostileWolf, 9.0D);
+            Utils.modifySpeed(hostileWolf, 0.35);
+        });
+        this.addEntity("entity.twilightforest.kobold", (EntityJoinLevelEvent event) -> {
+            Kobold kobold = (Kobold) event.getEntity();
+
+            Utils.modifySpeed(kobold, 0.4);
+        });
+        this.addEntity("entity.twilightforest.lich", (EntityJoinLevelEvent event) -> {
+            Lich lich = (Lich) event.getEntity();
+
+            Utils.modifyAttackDamage(lich, 5.0);
+        });
+        this.addEntity("entity.twilightforest.lower_goblin_knight", (EntityJoinLevelEvent event) -> {
+            LowerGoblinKnight lowerGoblinKnight = (LowerGoblinKnight) event.getEntity();
+
+            Utils.modifyAttackDamage(lowerGoblinKnight, 7.0D);
+            Utils.modifySpeed(lowerGoblinKnight, 0.32);
+        });
+
+        for (String slimeDescriptionId : slimeDescriptionIds) {
+            this.addEntity(slimeDescriptionId, (EntityJoinLevelEvent event) -> {
+                Slime slime = (Slime) event.getEntity();
+
+                Utils.modifyAttackDamage(slime, 8.0D);
+                Utils.modifySpeed(slime, 0.6F);
+            });
+        }
+
+        // this.addEntity("entity.twilightforest.minotaur", (EntityJoinLevelEvent event)
+        // -> {
+        // Minotaur lowerGoblinKnight = (LowerGoblinKnight) event.getEntity();
+
+        // Utils.modifyAttackDamage(lowerGoblinKnight, 7.0D);
+        // Utils.modifySpeed(lowerGoblinKnight, 0.32);
+        // });
+        // this.addEntity("entity.twilightforest.mist_wolf", (EntityJoinLevelEvent
+        // event) -> {
+        // MistWolf lowerGoblinKnight = (LowerGoblinKnight) event.getEntity();
+
+        // Utils.modifyAttackDamage(lowerGoblinKnight, 8.0D);
+        // Utils.modifySpeed(lowerGoblinKnight, 0.32);
+        // });
     }
 
     /**
