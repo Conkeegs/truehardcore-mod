@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 
-import com.conkeegs.truehardcore.overrides.entities.CustomEnderDragon;
 import com.conkeegs.truehardcore.overrides.entities.CustomSmallFireball;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 import com.conkeegs.truehardcore.utils.Utils;
@@ -21,12 +20,10 @@ import com.starfish_studios.naturalist.common.entity.Lion;
 import com.starfish_studios.naturalist.common.entity.Rhino;
 import com.starfish_studios.naturalist.common.entity.Snake;
 
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.CaveSpider;
@@ -67,6 +64,8 @@ import twilightforest.entity.monster.FireBeetle;
 import twilightforest.entity.monster.HostileWolf;
 import twilightforest.entity.monster.Kobold;
 import twilightforest.entity.monster.LowerGoblinKnight;
+import twilightforest.entity.monster.Minotaur;
+import twilightforest.entity.monster.MistWolf;
 
 /**
  * Registry of entities that will have their properties modified upon spawning.
@@ -140,21 +139,6 @@ public class EntityRegistry {
         this.addEntity("entity.minecraft.trident", (EntityJoinLevelEvent event) -> {
             ((ThrownTrident) event.getEntity()).setBaseDamage(11.0D);
         });
-        this.addEntity("entity.minecraft.evoker_fangs", (EntityJoinLevelEvent event) -> {
-            // EvokerFangs oldEntity = (EvokerFangs) event.getEntity();
-            // Level oldEntityLevel = oldEntity.level();
-
-            // Utils.replaceEntity(event, new CustomEvokerFangs(
-            // oldEntityLevel,
-            // oldEntity.getX(),
-            // oldEntity.getY(),
-            // oldEntity.getZ(),
-            // 0.0F,
-            // 0,
-            // oldEntity.getOwner()),
-            // oldEntity,
-            // oldEntityLevel);
-        });
         this.addEntity("entity.minecraft.evoker", (EntityJoinLevelEvent event) -> {
             Utils.modifySpeed((Evoker) event.getEntity(), 0.55F);
         });
@@ -196,55 +180,6 @@ public class EntityRegistry {
                     velocityZ),
                     oldEntity,
                     oldEntityLevel);
-        });
-        this.addEntity("entity.minecraft.shulker_bullet", (EntityJoinLevelEvent event) -> {
-            // ShulkerBullet oldEntity = (ShulkerBullet) event.getEntity();
-            // Shulker owner = (Shulker) oldEntity.getOwner();
-
-            // if (owner == null) {
-            // LOGGER.error("Shulker bullet owner is null");
-
-            // return;
-            // }
-
-            // Level oldEntityLevel = oldEntity.level();
-
-            // Utils.replaceEntity(event, new CustomShulkerBullet(
-            // owner.level(),
-            // owner,
-            // owner.getTarget(),
-            // owner.getAttachFace().getAxis()),
-            // oldEntity,
-            // oldEntityLevel);
-
-            // try {
-            // Field field = ShulkerBullet.class.getDeclaredField("f_37312_");
-
-            // field.setAccessible(true);
-
-            // Entity target = (Entity) field.get(oldEntity);
-
-            // Utils.replaceEntity(event, new CustomShulk(
-            // oldEntityLevel,
-            // (Shulker) oldEntity.getOwner(),
-            // target,
-            // oldEntity.getMotionDirection().getAxis()),
-            // oldEntity,
-            // oldEntityLevel);
-            // } catch (Exception e) {
-            // LOGGER.error("Error replacing Shulker bullet - {}", e);
-            // }
-        });
-        this.addEntity("entity.minecraft.iron_golem", (EntityJoinLevelEvent event) -> {
-            // IronGolem oldEntity = (IronGolem) event.getEntity();
-            // Level oldEntityLevel = oldEntity.level();
-
-            // Utils.modifyAttackDamage(oldEntity, 18.0D);
-            // Utils.modifySpeed(oldEntity, 0.25D);
-            // Utils.replaceEntity(event,
-            // new CustomIronGolem(EntityType.IRON_GOLEM, oldEntityLevel),
-            // oldEntity,
-            // oldEntityLevel);
         });
 
         for (String zombieDescriptionId : zombieDescriptionIds) {
@@ -399,15 +334,6 @@ public class EntityRegistry {
 
             Utils.modifyAttackDamage(zoglin, 11.0D);
             Utils.modifySpeed(zoglin, 0.35F);
-        });
-        this.addEntity("entity.minecraft.ender_dragon", (EntityJoinLevelEvent event) -> {
-            EnderDragon oldEntity = (EnderDragon) event.getEntity();
-            Level oldEntityLevel = oldEntity.level();
-
-            Utils.replaceEntity(event,
-                    new CustomEnderDragon((EntityType<? extends EnderDragon>) oldEntity.getType(), oldEntityLevel),
-                    oldEntity,
-                    oldEntityLevel);
         });
         this.addEntity("entity.naturalist.alligator", (EntityJoinLevelEvent event) -> {
             Alligator alligator = (Alligator) event.getEntity();
