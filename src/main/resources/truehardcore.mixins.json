@@ -1,0 +1,12 @@
+{
+    "required": false,
+    "package": "com.conkeegs.truehardcore.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "truehardcore.refmap.json",
+    "mixins": [
+        "ShulkerBulletMixin",
+        "IronGolemMixin"
+    ],
+    "client": [],
+    "minVersion": "0.8"
+}
