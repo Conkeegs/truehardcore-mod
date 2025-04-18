@@ -32,14 +32,16 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
  * Mod that makes Minecraft sooooo hard...eeeeeveryone deet...
@@ -63,8 +65,11 @@ public class TrueHardcore {
      * Truehardcore constructor.
      */
     public TrueHardcore() {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        // EntityRegister.ENTITIES.register(bus);
     }
 
     /**
@@ -76,6 +81,20 @@ public class TrueHardcore {
     public static void handleServerStarted(ServerStartedEvent event) {
         // sleeping not allowed, so we don't want phantoms spawning
         event.getServer().overworld().getGameRules().getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
+    }
+
+    /**
+     * Handle entity spawn events in client and server.
+     *
+     * @param event entity spawn event
+     */
+    public static void handleEntityJoinLevel(EntityJoinLevelEvent event) {
+        String entityDescriptionId = event.getEntity().getType().getDescriptionId();
+
+        // if it's an entity we want to modify
+        if (modifiedEntities.containsKey(entityDescriptionId)) {
+            modifiedEntities.get(entityDescriptionId).accept(event);
+        }
     }
 
     /**
@@ -140,12 +159,7 @@ public class TrueHardcore {
      */
     @SubscribeEvent
     public static void onEntitySpawn(EntityJoinLevelEvent event) {
-        String entityDescriptionId = event.getEntity().getType().getDescriptionId();
-
-        // if it's an entity we want to modify
-        if (modifiedEntities.containsKey(entityDescriptionId)) {
-            modifiedEntities.get(entityDescriptionId).accept(event);
-        }
+        handleEntityJoinLevel(event);
     }
 
     /**
@@ -400,13 +414,53 @@ public class TrueHardcore {
     // }
     // }
 
+    @Mod.EventBusSubscriber(modid = TrueHardcore.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public class ModBusEvents {
+        // private static final Logger LOGGER = TruestLogger.getLogger();
+
+        // @SubscribeEvent
+        // public static void newEntityAttributes(EntityAttributeCreationEvent event) {
+        // event.put(EntityRegister.CUSTOM_ENDER_DRAGON.get(),
+        // CustomEnderDragon.createAttributes().build());
+        // }
+
+        // @SubscribeEvent
+        // public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event)
+        // {
+        // event.register(EntityRegister.CUSTOM_ENDER_DRAGON.get(),
+        // SpawnPlacements.Type.ON_GROUND,
+        // Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules,
+        // SpawnPlacementRegisterEvent.Operation.OR);
+        // }
+    }
+
     // You can use EventBusSubscriber to automatically register all static methods
     // in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
+    @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class ClientForgeBusEvents {
+        // @SubscribeEvent
+        // public static void onEntitySpawn(EntityJoinLevelEvent event) {
+        // LOGGER.info("joined: {}", event.getEntity().getType().getDescriptionId());
 
+        // handleEntityJoinLevel(event);
+        // }
+
+        @SubscribeEvent
+        public static void onHurt(LivingHurtEvent event) {
+            LOGGER.info("Entity {} received {} damage", event.getEntity().getType().getDescriptionId(),
+                    event.getAmount());
         }
+    }
+
+    @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientModBusEvents {
+        // @SubscribeEvent
+        // public static void registerRenderers(EntityRenderersEvent.RegisterRenderers
+        // event) {
+        // LOGGER.info("loaded renderers");
+
+        // event.registerEntityRenderer(EntityRegister.CUSTOM_ENDER_DRAGON.get(),
+        // EnderDragonRenderer::new);
+        // }
     }
 }

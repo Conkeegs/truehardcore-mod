@@ -5,7 +5,10 @@
     "refmap": "truehardcore.refmap.json",
     "mixins": [
         "ShulkerBulletMixin",
-        "IronGolemMixin"
+        "IronGolemMixin",
+        "NatureBoltMixin",
+        "IceSnowballMixin",
+        "TomeBoltMixin"
     ],
     "client": [],
     "minVersion": "0.8"
