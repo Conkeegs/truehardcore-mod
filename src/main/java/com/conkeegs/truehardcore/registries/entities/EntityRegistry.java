@@ -386,7 +386,7 @@ public class EntityRegistry {
             Lion lion = (Lion) event.getEntity();
 
             Utils.modifyAttackDamage(lion, 8.0D);
-            Utils.modifySpeed(lion, 0.23);
+            Utils.modifySpeed(lion, 0.21);
         });
         this.addEntity("entity.naturalist.rhino", (EntityJoinLevelEvent event) -> {
             Rhino rhino = (Rhino) event.getEntity();
@@ -455,16 +455,14 @@ public class EntityRegistry {
             });
         }
 
-        // this.addEntity("entity.twilightforest.minotaur", (EntityJoinLevelEvent event)
-        // -> {
-        // Minotaur lowerGoblinKnight = (LowerGoblinKnight) event.getEntity();
+        this.addEntity("entity.twilightforest.minotaur", (EntityJoinLevelEvent event) -> {
+            Minotaur minotaur = (Minotaur) event.getEntity();
 
-        // Utils.modifyAttackDamage(lowerGoblinKnight, 7.0D);
-        // Utils.modifySpeed(lowerGoblinKnight, 0.32);
-        // });
-        // this.addEntity("entity.twilightforest.mist_wolf", (EntityJoinLevelEvent
-        // event) -> {
-        // MistWolf lowerGoblinKnight = (LowerGoblinKnight) event.getEntity();
+            Utils.modifyAttackDamage(minotaur, 7.0D);
+            Utils.modifySpeed(minotaur, 0.32);
+        });
+        this.addEntity("entity.twilightforest.mist_wolf", (EntityJoinLevelEvent event) -> {
+            MistWolf mistWolf = (MistWolf) event.getEntity();
 
         // Utils.modifyAttackDamage(lowerGoblinKnight, 8.0D);
         // Utils.modifySpeed(lowerGoblinKnight, 0.32);
