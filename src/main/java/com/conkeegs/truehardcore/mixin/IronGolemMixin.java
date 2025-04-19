@@ -17,6 +17,6 @@ public class IronGolemMixin {
     private void modifyKnockback(Entity target, Vec3 motion) {
         IronGolem self = (IronGolem) (Object) this;
 
-        target.setDeltaMovement(self.getLookAngle().scale(20.0D).add(0.0D, 1.2D, 0.0D));
+        target.setDeltaMovement(self.getLookAngle().scale(20.0D).add(0.0D, 1.8D, 0.0D));
     }
 }
