@@ -82,6 +82,8 @@ public class TrueHardcore {
      */
     @SubscribeEvent
     public static void handleServerStarted(ServerStartedEvent event) {
+        TrueHardcore.server = event.getServer();
+
         // sleeping not allowed, so we don't want phantoms spawning
         event.getServer().overworld().getGameRules().getRule(GameRules.RULE_DOINSOMNIA).set(false, server);
     }
@@ -174,7 +176,8 @@ public class TrueHardcore {
     public void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer) {
             // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-            List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
+            List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(
+                    TrueHardcore.server.getPlayerList().getPlayers());
 
             // disconnect everyone and make sure they can see the reason of the death
             for (ServerPlayer player : playerList) {
@@ -183,7 +186,7 @@ public class TrueHardcore {
             }
 
             playerList.clear();
-            server.overworld().disconnect();
+            TrueHardcore.server.overworld().disconnect();
 
             shouldShutdownServer = true;
         }
@@ -211,7 +214,7 @@ public class TrueHardcore {
      */
     public static void handleWorldDeletion(ServerTickEvent event) {
         try {
-            server.stopServer();
+            TrueHardcore.server.stopServer();
             Util.shutdownExecutors();
             SkullBlockEntity.clear();
         } catch (Exception exception) {
