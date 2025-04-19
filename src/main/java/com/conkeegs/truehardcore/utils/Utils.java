@@ -21,6 +21,17 @@ public final class Utils {
     private static final Logger LOGGER = TruestLogger.getLogger();
 
     /**
+     * Copy {@code newEntity}'s position from {@code oldEntity}.
+     *
+     * @param newEntity the entity to set position on
+     * @param oldEntity the entity to get position from
+     */
+    public static final void copyEntityPosition(Entity newEntity, Entity oldEntity) {
+        newEntity.moveTo(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ(), oldEntity.getYRot(),
+                oldEntity.getXRot());
+    }
+
+    /**
      * Replace an entity after a {@code EntityJoinLevelEvent} fires.
      *
      * @param event          {@code EntityJoinLevelEvent} event
@@ -31,8 +42,7 @@ public final class Utils {
     public static final void replaceEntity(EntityJoinLevelEvent event, Entity newEntity, Entity oldEntity,
             Level oldEntityLevel) {
         event.setCanceled(true);
-        newEntity.moveTo(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ(), oldEntity.getYRot(),
-                oldEntity.getXRot());
+        copyEntityPosition(newEntity, oldEntity);
         // 7.0?
         oldEntityLevel.addFreshEntity(newEntity);
         oldEntity.discard();
@@ -49,8 +59,7 @@ public final class Utils {
     public static final void replaceEntity(MobSpawnEvent event, Entity newEntity, Entity oldEntity,
             Level oldEntityLevel) {
         event.setCanceled(true);
-        newEntity.moveTo(oldEntity.getX(), oldEntity.getY(), oldEntity.getZ(), oldEntity.getYRot(),
-                oldEntity.getXRot());
+        copyEntityPosition(newEntity, oldEntity);
         // 7.0?
         oldEntityLevel.addFreshEntity(newEntity);
         oldEntity.discard();
