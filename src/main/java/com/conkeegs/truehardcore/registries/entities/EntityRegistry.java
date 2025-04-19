@@ -21,6 +21,7 @@ import com.starfish_studios.naturalist.common.entity.Rhino;
 import com.starfish_studios.naturalist.common.entity.Snake;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.animal.Wolf;
@@ -55,8 +56,17 @@ import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import quek.undergarden.entity.Forgotten;
+import quek.undergarden.entity.animal.Brute;
+import quek.undergarden.entity.boss.ForgottenGuardian;
+import quek.undergarden.entity.cavern.Muncher;
+import quek.undergarden.entity.cavern.Nargoyle;
+import quek.undergarden.entity.rotspawn.Rotling;
+import quek.undergarden.entity.rotspawn.Rotwalker;
+import quek.undergarden.entity.stoneborn.Stoneborn;
 import tallestegg.guardvillagers.entities.Guard;
 import twilightforest.entity.boss.Lich;
+import twilightforest.entity.boss.Naga;
 import twilightforest.entity.monster.BlockChainGoblin;
 import twilightforest.entity.monster.CarminiteGolem;
 import twilightforest.entity.monster.DeathTome;
@@ -66,6 +76,14 @@ import twilightforest.entity.monster.Kobold;
 import twilightforest.entity.monster.LowerGoblinKnight;
 import twilightforest.entity.monster.Minotaur;
 import twilightforest.entity.monster.MistWolf;
+import twilightforest.entity.monster.PinchBeetle;
+import twilightforest.entity.monster.Redcap;
+import twilightforest.entity.monster.SnowGuardian;
+import twilightforest.entity.monster.StableIceCore;
+import twilightforest.entity.monster.SwarmSpider;
+import twilightforest.entity.monster.UnstableIceCore;
+import twilightforest.entity.monster.WinterWolf;
+import twilightforest.entity.monster.Wraith;
 
 /**
  * Registry of entities that will have their properties modified upon spawning.
@@ -464,9 +482,116 @@ public class EntityRegistry {
         this.addEntity("entity.twilightforest.mist_wolf", (EntityJoinLevelEvent event) -> {
             MistWolf mistWolf = (MistWolf) event.getEntity();
 
-        // Utils.modifyAttackDamage(lowerGoblinKnight, 8.0D);
-        // Utils.modifySpeed(lowerGoblinKnight, 0.32);
-        // });
+            Utils.modifyAttackDamage(mistWolf, 9.0D);
+            Utils.modifySpeed(mistWolf, 0.4);
+        });
+        this.addEntity("entity.twilightforest.naga", (EntityJoinLevelEvent event) -> {
+            Naga naga = (Naga) event.getEntity();
+
+            Utils.modifyAttackDamage(naga, 8.0D);
+        });
+        this.addEntity("entity.twilightforest.pinch_beetle", (EntityJoinLevelEvent event) -> {
+            PinchBeetle pinchBeetle = (PinchBeetle) event.getEntity();
+
+            Utils.modifyAttackDamage(pinchBeetle, 6.5D);
+            Utils.modifySpeed(pinchBeetle, 0.28);
+        });
+        this.addEntity("entity.twilightforest.redcap", (EntityJoinLevelEvent event) -> {
+            Redcap redcap = (Redcap) event.getEntity();
+
+            Utils.modifySpeed(redcap, 0.35);
+        });
+        this.addEntity("entity.twilightforest.redcap_sapper", (EntityJoinLevelEvent event) -> {
+            Redcap redcap = (Redcap) event.getEntity();
+
+            Utils.modifySpeed(redcap, 0.35);
+        });
+        this.addEntity("entity.twilightforest.snow_guardian", (EntityJoinLevelEvent event) -> {
+            SnowGuardian snowGuardian = (SnowGuardian) event.getEntity();
+
+            Utils.modifyAttackDamage(snowGuardian, 4.5D);
+            Utils.modifySpeed(snowGuardian, 0.27);
+        });
+        this.addEntity("entity.twilightforest.stable_ice_core", (EntityJoinLevelEvent event) -> {
+            StableIceCore stableIceCore = (StableIceCore) event.getEntity();
+
+            Utils.modifyAttackDamage(stableIceCore, 7.0D);
+            Utils.modifySpeed(stableIceCore, 0.27);
+        });
+        this.addEntity("entity.twilightforest.swarm_spider", (EntityJoinLevelEvent event) -> {
+            SwarmSpider swarmSpider = (SwarmSpider) event.getEntity();
+
+            Utils.modifyAttackDamage(swarmSpider, 5.0D);
+            Utils.modifySpeed(swarmSpider, 0.32);
+        });
+        this.addEntity("entity.twilightforest.unstable_ice_core", (EntityJoinLevelEvent event) -> {
+            UnstableIceCore unstableIceCore = (UnstableIceCore) event.getEntity();
+
+            Utils.modifyAttackDamage(unstableIceCore, 9.0D);
+            Utils.modifySpeed(unstableIceCore, 0.27);
+        });
+        this.addEntity("entity.twilightforest.winter_wolf", (EntityJoinLevelEvent event) -> {
+            WinterWolf winterWolf = (WinterWolf) event.getEntity();
+
+            Utils.modifyAttackDamage(winterWolf, 9.0D);
+            Utils.modifySpeed(winterWolf, 0.35);
+        });
+        this.addEntity("entity.twilightforest.wraith", (EntityJoinLevelEvent event) -> {
+            Wraith wraith = (Wraith) event.getEntity();
+
+            Utils.modifyAttackDamage(wraith, 9.0D);
+        });
+        this.addEntity("entity.undergarden.rotling", (EntityJoinLevelEvent event) -> {
+            Rotling rotling = (Rotling) event.getEntity();
+
+            Utils.modifyAttackDamage(rotling, 5.0D);
+        });
+        this.addEntity("entity.undergarden.rotwalker", (EntityJoinLevelEvent event) -> {
+            Rotwalker rotwalker = (Rotwalker) event.getEntity();
+
+            Utils.modifyAttackDamage(rotwalker, 6.0D);
+            Utils.modifySpeed(rotwalker, 0.26);
+        });
+        this.addEntity("entity.undergarden.brute", (EntityJoinLevelEvent event) -> {
+            Brute brute = (Brute) event.getEntity();
+
+            Utils.modifyAttackDamage(brute, 6.0D);
+            Utils.modifySpeed(brute, 0.26);
+        });
+        this.addEntity("entity.undergarden.stoneborn", (EntityJoinLevelEvent event) -> {
+            Stoneborn stoneborn = (Stoneborn) event.getEntity();
+
+            Utils.modifyAttackDamage(stoneborn, 6.0D);
+            Utils.modifySpeed(stoneborn, 0.33);
+        });
+        this.addEntity("entity.undergarden.nargoyle", (EntityJoinLevelEvent event) -> {
+            Nargoyle nargoyle = (Nargoyle) event.getEntity();
+
+            Utils.modifySpeed(nargoyle, 0.33);
+        });
+        this.addEntity("entity.undergarden.muncher", (EntityJoinLevelEvent event) -> {
+            Muncher muncher = (Muncher) event.getEntity();
+
+            Utils.modifySpeed(muncher, 0.38);
+        });
+        this.addEntity("entity.undergarden.forgotten", (EntityJoinLevelEvent event) -> {
+            Forgotten forgotten = (Forgotten) event.getEntity();
+
+            Utils.modifySpeed(forgotten, 0.28);
+        });
+        this.addEntity("entity.undergarden.forgotten_guardian", (EntityJoinLevelEvent event) -> {
+            ForgottenGuardian forgotten_guardian = (ForgottenGuardian) event.getEntity();
+
+            forgotten_guardian.getAttribute(Attributes.ATTACK_KNOCKBACK).setBaseValue(6.0D);
+            Utils.modifySpeed(forgotten_guardian, 0.3);
+        });
+        this.addEntity("entity.twilightforest.forgotten_guardian", (EntityJoinLevelEvent event) -> {
+            org.violetmoon.quark.content.mobs.entity.Wraith wraith = (org.violetmoon.quark.content.mobs.entity.Wraith) event
+                    .getEntity();
+
+            Utils.modifyAttackDamage(wraith, 7.0D);
+            Utils.modifySpeed(wraith, 0.33);
+        });
     }
 
     /**

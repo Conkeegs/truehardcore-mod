@@ -176,6 +176,14 @@ dependencies {
     // Optionally, to run it in dev:
     runtimeOnly fg.deobf("twilightforest:twilightforest:1.20.1-4.3.2508-universal")
 
+    compileOnly fg.deobf("The_Undergarden:The_Undergarden:1.20.1-0.8.14")
+    // Optionally, to run it in dev:
+    runtimeOnly fg.deobf("The_Undergarden:The_Undergarden:1.20.1-0.8.14")
+
+    compileOnly fg.deobf("Quark:Quark:4.0-461")
+    // Optionally, to run it in dev:
+    runtimeOnly fg.deobf("Quark:Quark:4.0-461")
+
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
