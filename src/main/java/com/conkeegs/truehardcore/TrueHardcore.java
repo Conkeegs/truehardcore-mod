@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
@@ -20,16 +19,12 @@ import com.conkeegs.truehardcore.overrides.objects.CustomExplosion;
 import com.conkeegs.truehardcore.registries.entities.EntityRegistry;
 import com.conkeegs.truehardcore.registries.explosions.ExplosionRegistry;
 import com.conkeegs.truehardcore.utils.TruestLogger;
-import com.conkeegs.truehardcore.utils.Utils;
-import com.mojang.authlib.GameProfile;
 
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
@@ -41,7 +36,6 @@ import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -196,22 +190,6 @@ public class TrueHardcore {
 
             shouldShutdownServer = true;
         }
-    }
-
-    @SubscribeEvent
-    public void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
-        Player player = (Player) event.getEntity();
-        ServerLevel level = (ServerLevel) player.level();
-
-        if (level == null) {
-            return;
-        }
-
-        ServerPlayer logger = new ServerPlayer(TrueHardcore.server, level,
-                new GameProfile(UUID.randomUUID(), player.getDisplayName().getString()));
-
-        Utils.copyEntityPosition(logger, player);
-        level.addFreshEntity(logger);
     }
 
     /**
