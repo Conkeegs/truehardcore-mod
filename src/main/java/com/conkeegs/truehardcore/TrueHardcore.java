@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,9 @@ import com.conkeegs.truehardcore.registries.explosions.ExplosionRegistry;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 
 import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
@@ -163,107 +166,27 @@ public class TrueHardcore {
     }
 
     /**
-     * Handle the spawn event of a living mob we want to modify properties on.
-     *
-     * @param entity          the living entity to modify
-     * @param entityClassName the living entity's class's simple name
-     */
-    // public static void handleLivingEntitySpawn(Entity entity, String
-    // entityClassName) {
-    // MobRegistry.MobProperties mobProperties = modifiedMobs.get(entityClassName);
-    // AttributeInstance attackDamageAttribute = ((LivingEntity)
-    // entity).getAttribute(Attributes.ATTACK_DAMAGE);
-    // Double mobDamage = mobProperties.getDamage();
-
-    // // modify mob damage if it implements an attack damage attribute
-    // if (attackDamageAttribute != null && mobDamage != null) {
-    // attackDamageAttribute.setBaseValue(mobDamage);
-    // }
-
-    // AttributeInstance movementSpeedAttribute = ((LivingEntity)
-    // entity).getAttribute(Attributes.MOVEMENT_SPEED);
-
-    // // skip processing if mob does not implement a speed attribute
-    // if (movementSpeedAttribute == null) {
-    // return;
-    // }
-
-    // Float mobSpeed = mobProperties.getSpeed();
-
-    // if (mobSpeed != null) {
-    // movementSpeedAttribute.setBaseValue(mobSpeed);
-    // }
-
-    // // we want some mobs to have random speeds (like zombies), so check for it
-    // if (mobProperties.getRandomSpeeds() != null) {
-    // movementSpeedAttribute.setBaseValue(mobProperties.getRandomSpeed());
-    // }
-
-    // if (entity instanceof Zombie zombie && zombie.isBaby()) {
-    // AttributeInstance zombieAttributeInstance =
-    // zombie.getAttribute(Attributes.MOVEMENT_SPEED);
-
-    // if (zombieAttributeInstance == null) {
-    // LOGGER.error("Zombie movement speed attribute is null, cannot set custom
-    // zombie speed");
-
-    // return;
-    // }
-
-    // movementSpeedAttribute
-    // .setBaseValue(zombieAttributeInstance.getValue());
-    // } else if (entity instanceof Piglin piglin && piglin.isBaby()) {
-    // AttributeInstance piglinAttributeInstance =
-    // piglin.getAttribute(Attributes.MOVEMENT_SPEED);
-
-    // if (piglinAttributeInstance == null) {
-    // LOGGER.error("Piglin movement speed attribute is null, cannot set custom
-    // piglin speed");
-
-    // return;
-    // }
-
-    // movementSpeedAttribute
-    // .setBaseValue(piglinAttributeInstance.getValue());
-    // }
-
-    // if (entity instanceof Wolf wolf) {
-    // AttributeInstance wolfAttributeInstance =
-    // wolf.getAttribute(Attributes.MAX_HEALTH);
-
-    // if (wolfAttributeInstance == null) {
-    // LOGGER.error("Wolf health attribute is null, cannot set custom wolf health");
-
-    // return;
-    // }
-
-    // wolfAttributeInstance.setBaseValue(20.0D);
-    // }
-    // }
-
-    /**
      * Handle living entity death events.
      *
      * @param event the living entity death event
      */
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event) {
-        // if (event.getEntity() instanceof ServerPlayer) {
-        // // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-        // List<ServerPlayer> playerList = new
-        // ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
+        if (event.getEntity() instanceof ServerPlayer) {
+            // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+            List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(server.getPlayerList().getPlayers());
 
-        // // disconnect everyone and make sure they can see the reason of the death
-        // for (ServerPlayer player : playerList) {
-        // player.connection
-        // .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
-        // }
+            // disconnect everyone and make sure they can see the reason of the death
+            for (ServerPlayer player : playerList) {
+                player.connection
+                        .disconnect(Component.literal(event.getSource().getLocalizedDeathMessage(player).getString()));
+            }
 
-        // playerList.clear();
-        // server.overworld().disconnect();
+            playerList.clear();
+            server.overworld().disconnect();
 
-        // shouldShutdownServer = true;
-        // }
+            shouldShutdownServer = true;
+        }
     }
 
     /**
