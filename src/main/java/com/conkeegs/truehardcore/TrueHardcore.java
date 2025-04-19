@@ -200,9 +200,13 @@ public class TrueHardcore {
 
     @SubscribeEvent
     public void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
-        LOGGER.info("GRUM DIDDLY GRUM GRUM");
         Player player = (Player) event.getEntity();
         ServerLevel level = (ServerLevel) player.level();
+
+        if (level == null) {
+            return;
+        }
+
         ServerPlayer logger = new ServerPlayer(TrueHardcore.server, level,
                 new GameProfile(UUID.randomUUID(), player.getDisplayName().getString()));
 
