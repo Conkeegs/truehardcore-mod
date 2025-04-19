@@ -36,6 +36,7 @@ import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -190,6 +191,11 @@ public class TrueHardcore {
 
             shouldShutdownServer = true;
         }
+    }
+
+    @SubscribeEvent
+    public void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
+        LOGGER.info("GRUM DIDDLY GRUM GRUM");
     }
 
     /**
