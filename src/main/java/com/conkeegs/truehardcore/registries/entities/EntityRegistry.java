@@ -20,6 +20,7 @@ import com.starfish_studios.naturalist.common.entity.Lion;
 import com.starfish_studios.naturalist.common.entity.Rhino;
 import com.starfish_studios.naturalist.common.entity.Snake;
 
+import de.cadentem.cave_dweller.entities.CaveDwellerEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Panda;
@@ -211,7 +212,7 @@ public class EntityRegistry {
                     return;
                 }
 
-                Utils.modifySpeed(zombie, Utils.getRandomFromArrayList(zombieSpeeds));
+                Utils.modifySpeed(zombie, 0.4F);
             });
         }
 
@@ -591,6 +592,11 @@ public class EntityRegistry {
 
             Utils.modifyAttackDamage(wraith, 7.0D);
             Utils.modifySpeed(wraith, 0.33);
+        });
+        this.addEntity("entity.cavedweller.cave_dweller", (EntityJoinLevelEvent event) -> {
+            CaveDwellerEntity caveDwellerEntity = (CaveDwellerEntity) event.getEntity();
+
+            Utils.modifyAttackDamage(caveDwellerEntity, 5.0D);
         });
     }
 
