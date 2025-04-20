@@ -235,7 +235,7 @@ public class EntityRegistry {
         }
 
         this.addEntity("entity.minecraft.creeper", (EntityJoinLevelEvent event) -> {
-            Utils.modifySpeed((Creeper) event.getEntity(), Utils.getRandomFromArrayList(creeperSpeeds));
+            Utils.modifySpeed((Creeper) event.getEntity(), 0.35F);
         });
         this.addEntity("entity.minecraft.elder_guardian", (EntityJoinLevelEvent event) -> {
             Utils.modifyAttackDamage((ElderGuardian) event.getEntity(), 12.0D);
