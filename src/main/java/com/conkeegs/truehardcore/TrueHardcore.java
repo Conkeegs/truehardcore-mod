@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,9 @@ import com.conkeegs.truehardcore.registries.explosions.ExplosionRegistry;
 import com.conkeegs.truehardcore.utils.TruestLogger;
 
 import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
@@ -171,23 +174,23 @@ public class TrueHardcore {
      */
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event) {
-        // if (event.getEntity() instanceof ServerPlayer) {
-        // ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-        // List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(
-        // TrueHardcore.server.getPlayerList().getPlayers());
+        if (event.getEntity() instanceof ServerPlayer) {
+            ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+            List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(
+                    TrueHardcore.server.getPlayerList().getPlayers());
 
-        // // disconnect everyone and make sure they can see the reason of the death
-        // for (ServerPlayer player : playerList) {
-        // player.connection
-        // .disconnect(Component
-        // .literal(event.getSource().getLocalizedDeathMessage(playerWhoDied).getString()));
-        // }
+            // disconnect everyone and make sure they can see the reason of the death
+            for (ServerPlayer player : playerList) {
+                player.connection
+                        .disconnect(Component
+                                .literal(event.getSource().getLocalizedDeathMessage(playerWhoDied).getString()));
+            }
 
-        // playerList.clear();
-        // TrueHardcore.server.overworld().disconnect();
+            playerList.clear();
+            TrueHardcore.server.overworld().disconnect();
 
-        // shouldShutdownServer = true;
-        // }
+            shouldShutdownServer = true;
+        }
     }
 
     /**
