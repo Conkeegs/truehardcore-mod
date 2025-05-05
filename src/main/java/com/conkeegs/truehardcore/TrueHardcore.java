@@ -372,11 +372,12 @@ public class TrueHardcore {
         // handleEntityJoinLevel(event);
         // }
 
-        @SubscribeEvent
-        public static void onHurt(LivingHurtEvent event) {
-            LOGGER.info("Entity {} received {} damage", event.getEntity().getType().getDescriptionId(),
-                    event.getAmount());
-        }
+        // @SubscribeEvent
+        // public static void onHurt(LivingHurtEvent event) {
+        // LOGGER.info("Entity {} received {} damage",
+        // event.getEntity().getType().getDescriptionId(),
+        // event.getAmount());
+        // }
     }
 
     @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
