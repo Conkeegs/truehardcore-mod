@@ -206,6 +206,7 @@ public class EntityRegistry {
                 Zombie zombie = (Zombie) event.getEntity();
 
                 Utils.modifyAttackDamage(zombie, (!(zombie instanceof ZombifiedPiglin)) ? 9.0D : 7.0D);
+                Utils.modifyAttackSpeed(zombie, 2.5D);
 
                 // don't modify speed of baby zombies as they will become ungodly fast
                 if (zombie.isBaby()) {
@@ -225,6 +226,7 @@ public class EntityRegistry {
                 Spider spider = (Spider) event.getEntity();
 
                 Utils.modifyAttackDamage(spider, 8.0D);
+                Utils.modifyAttackSpeed(spider, 2.8D);
 
                 if (spider instanceof CaveSpider) {
                     return;
@@ -241,10 +243,16 @@ public class EntityRegistry {
             Utils.modifyAttackDamage((ElderGuardian) event.getEntity(), 12.0D);
         });
         this.addEntity("entity.minecraft.enderman", (EntityJoinLevelEvent event) -> {
-            Utils.modifyAttackDamage((EnderMan) event.getEntity(), 9.0D);
+            EnderMan enderman = (EnderMan) event.getEntity();
+
+            Utils.modifyAttackSpeed(enderman, 2.5D);
+            Utils.modifyAttackDamage(enderman, 9.0D);
         });
         this.addEntity("entity.minecraft.endermite", (EntityJoinLevelEvent event) -> {
-            Utils.modifyAttackDamage((Endermite) event.getEntity(), 7.0D);
+            Endermite endermite = (Endermite) event.getEntity();
+
+            Utils.modifyAttackSpeed(endermite, 2.8D);
+            Utils.modifyAttackDamage(endermite, 7.0D);
         });
         this.addEntity("entity.minecraft.guardian", (EntityJoinLevelEvent event) -> {
             Guardian guardian = (Guardian) event.getEntity();
@@ -312,7 +320,8 @@ public class EntityRegistry {
         this.addEntity("entity.minecraft.magma_cube", (EntityJoinLevelEvent event) -> {
             MagmaCube slime = (MagmaCube) event.getEntity();
 
-            Utils.modifyAttackDamage(slime, 10.0D);
+            Utils.modifyAttackDamage(slime, 9.0D);
+            Utils.modifyAttackSpeed(slime, 2.5D);
             Utils.modifySpeed(slime, 0.7F);
         });
 
@@ -331,7 +340,7 @@ public class EntityRegistry {
         }
 
         this.addEntity("entity.minecraft.vex", (EntityJoinLevelEvent event) -> {
-            Utils.modifyAttackDamage((Vex) event.getEntity(), 6.5D);
+            Utils.modifyAttackDamage((Vex) event.getEntity(), 3.5D);
         });
         this.addEntity("entity.minecraft.witch", (EntityJoinLevelEvent event) -> {
             Utils.modifySpeed((Witch) event.getEntity(), 0.32F);
@@ -345,6 +354,7 @@ public class EntityRegistry {
         this.addEntity("entity.minecraft.wolf", (EntityJoinLevelEvent event) -> {
             Wolf wolf = (Wolf) event.getEntity();
 
+            Utils.modifyAttackSpeed(wolf, 2.8D);
             Utils.modifyAttackDamage(wolf, 10.0D);
             Utils.modifySpeed(wolf, 0.35F);
         });
