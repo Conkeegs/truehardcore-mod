@@ -1,4 +1,7 @@
+// test undergarden and twilight mobs and quark too
+// explosionregistry should use descriptionid's
+// better nether and end
+// better ender dragon
+// creeper overhaul
 // fix server not shutting down properly
-// fix log messages
-// fix entity damage no matter armor
-// ender dragon damages fix
+d
