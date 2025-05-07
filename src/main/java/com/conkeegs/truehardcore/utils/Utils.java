@@ -85,11 +85,12 @@ public final class Utils {
     public static final void modifyAttackDamage(LivingEntity entity, double damage) {
         AttributeInstance damageAttribute = entity.getAttribute(Attributes.ATTACK_DAMAGE);
 
-        if (damageAttribute == null) {
-            LOGGER.error("Could not modify damage attribute for entity: '{}'", entity.getType().getDescriptionId());
+        // if (damageAttribute == null) {
+        // LOGGER.error("Could not modify damage attribute for entity: '{}'",
+        // entity.getType().getDescriptionId());
 
-            return;
-        }
+        // return;
+        // }
 
         damageAttribute.setBaseValue(damage);
     }
@@ -103,11 +104,12 @@ public final class Utils {
     public static final void modifySpeed(LivingEntity entity, float speed) {
         AttributeInstance speedAttribute = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 
-        if (speedAttribute == null) {
-            LOGGER.error("Could not modify speed attribute for entity: '{}'", entity.getType().getDescriptionId());
+        // if (speedAttribute == null) {
+        // LOGGER.error("Could not modify speed attribute for entity: '{}'",
+        // entity.getType().getDescriptionId());
 
-            return;
-        }
+        // return;
+        // }
 
         speedAttribute.setBaseValue(speed);
     }
@@ -121,11 +123,12 @@ public final class Utils {
     public static final void modifySpeed(LivingEntity entity, double speed) {
         AttributeInstance speedAttribute = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 
-        if (speedAttribute == null) {
-            LOGGER.error("Could not modify speed attribute for entity: '{}'", entity.getType().getDescriptionId());
+        // if (speedAttribute == null) {
+        // LOGGER.error("Could not modify speed attribute for entity: '{}'",
+        // entity.getType().getDescriptionId());
 
-            return;
-        }
+        // return;
+        // }
 
         speedAttribute.setBaseValue(speed);
     }
@@ -139,12 +142,12 @@ public final class Utils {
     public static final void modifyAttackSpeed(LivingEntity entity, double attackSpeed) {
         AttributeInstance attackSpeedAttribute = entity.getAttribute(Attributes.ATTACK_SPEED);
 
-        if (attackSpeedAttribute == null) {
-            LOGGER.error("Could not modify attack speed attribute for entity: '{}'",
-                    entity.getType().getDescriptionId());
+        // if (attackSpeedAttribute == null) {
+        // LOGGER.error("Could not modify attack speed attribute for entity: '{}'",
+        // entity.getType().getDescriptionId());
 
-            return;
-        }
+        // return;
+        // }
 
         attackSpeedAttribute.setBaseValue(attackSpeed);
     }
