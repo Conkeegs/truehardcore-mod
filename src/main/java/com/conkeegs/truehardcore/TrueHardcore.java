@@ -173,23 +173,23 @@ public class TrueHardcore {
      */
     @SubscribeEvent
     public void onPlayerDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer) {
-            ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
-            List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(
-                    TrueHardcore.server.getPlayerList().getPlayers());
+        // if (event.getEntity() instanceof ServerPlayer) {
+        //     ServerPlayer playerWhoDied = (ServerPlayer) event.getEntity();
+        //     List<ServerPlayer> playerList = new ArrayList<ServerPlayer>(
+        //             TrueHardcore.server.getPlayerList().getPlayers());
 
-            // disconnect everyone and make sure they can see the reason of the death
-            for (ServerPlayer player : playerList) {
-                player.connection
-                        .disconnect(Component
-                                .literal(event.getSource().getLocalizedDeathMessage(playerWhoDied).getString()));
-            }
+        //     // disconnect everyone and make sure they can see the reason of the death
+        //     for (ServerPlayer player : playerList) {
+        //         player.connection
+        //                 .disconnect(Component
+        //                         .literal(event.getSource().getLocalizedDeathMessage(playerWhoDied).getString()));
+        //     }
 
-            playerList.clear();
-            TrueHardcore.server.overworld().disconnect();
+        //     playerList.clear();
+        //     TrueHardcore.server.overworld().disconnect();
 
-            shouldShutdownServer = true;
-        }
+        //     shouldShutdownServer = true;
+        // }
     }
 
     /**
