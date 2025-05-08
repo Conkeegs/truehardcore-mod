@@ -86,8 +86,8 @@ public final class Utils {
         AttributeInstance damageAttribute = entity.getAttribute(Attributes.ATTACK_DAMAGE);
 
         if (damageAttribute == null) {
-            // LOGGER.error("Could not modify damage attribute for entity: '{}'",
-            // entity.getType().getDescriptionId());
+            LOGGER.error("Could not modify damage attribute for entity: '{}'",
+                    entity.getType().getDescriptionId());
 
             return;
         }
@@ -105,8 +105,8 @@ public final class Utils {
         AttributeInstance speedAttribute = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 
         if (speedAttribute == null) {
-            // LOGGER.error("Could not modify speed attribute for entity: '{}'",
-            // entity.getType().getDescriptionId());
+            LOGGER.error("Could not modify speed attribute for entity: '{}'",
+                    entity.getType().getDescriptionId());
 
             return;
         }
@@ -124,8 +124,8 @@ public final class Utils {
         AttributeInstance speedAttribute = entity.getAttribute(Attributes.MOVEMENT_SPEED);
 
         if (speedAttribute == null) {
-            // LOGGER.error("Could not modify speed attribute for entity: '{}'",
-            // entity.getType().getDescriptionId());
+            LOGGER.error("Could not modify speed attribute for entity: '{}'",
+                    entity.getType().getDescriptionId());
 
             return;
         }
@@ -143,8 +143,8 @@ public final class Utils {
         AttributeInstance attackSpeedAttribute = entity.getAttribute(Attributes.ATTACK_SPEED);
 
         if (attackSpeedAttribute == null) {
-            // LOGGER.error("Could not modify attack speed attribute for entity: '{}'",
-            // entity.getType().getDescriptionId());
+            LOGGER.error("Could not modify attack speed attribute for entity: '{}'",
+                    entity.getType().getDescriptionId());
 
             return;
         }
